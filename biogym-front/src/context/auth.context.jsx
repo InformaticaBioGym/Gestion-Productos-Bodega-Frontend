@@ -1,0 +1,82 @@
+import { createContext, useState, useContext, useEffect } from "react";
+import { loginRequest } from "../services/auth.service.js";
+
+export const AuthContext = createContext();
+
+export const useAuth = () => {
+  const context = useContext(AuthContext);
+  if (!context) {
+    throw new Error("useAuth debe usarse dentro de un AuthProvider");
+  }
+  return context;
+};
+
+export const AuthProvider = ({ children }) => {
+  const [user, setUser] = useState(null);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [errors, setErrors] = useState([]);
+  
+  const [loading, setLoading] = useState(true); 
+
+  const signin = async (user) => {
+    try {
+      const res = await loginRequest(user);
+      
+      setUser(res.data.usuario);
+      setIsAuthenticated(true);
+      localStorage.setItem("token", res.data.token); 
+    } catch (error) {
+      if (Array.isArray(error.response.data)) {
+        return setErrors(error.response.data);
+      }
+      setErrors([error.response.data.mensaje || "Error al iniciar sesión"]);
+    }
+  };
+
+  const logout = () => {
+    localStorage.removeItem("token");
+    setUser(null);
+    setIsAuthenticated(false);
+  };
+
+  useEffect(() => {
+    if (errors.length > 0) {
+      const timer = setTimeout(() => {
+        setErrors([]);
+      }, 5000);
+      return () => clearTimeout(timer);
+    }
+  }, [errors]);
+
+  useEffect(() => {
+    const checkLogin = () => {
+        const token = localStorage.getItem("token");
+        if (!token) {
+            setIsAuthenticated(false);
+            setLoading(false);
+            return;
+        }
+        
+        setIsAuthenticated(true);
+        // decodificar el token o pedir perfil al backend para llenar "user"
+        // Pero para empezar esto sirve.
+        setLoading(false);
+    };
+    checkLogin();
+  }, []);
+
+  return (
+    <AuthContext.Provider
+      value={{
+        signin,
+        logout,
+        user,
+        isAuthenticated,
+        errors,
+        loading,
+      }}
+    >
+      {children}
+    </AuthContext.Provider>
+  );
+};
