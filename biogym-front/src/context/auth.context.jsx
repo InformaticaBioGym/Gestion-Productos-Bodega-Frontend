@@ -26,10 +26,14 @@ export const AuthProvider = ({ children }) => {
       setIsAuthenticated(true);
       localStorage.setItem("token", res.data.token); 
     } catch (error) {
-      if (Array.isArray(error.response.data)) {
-        return setErrors(error.response.data);
+      console.error('signin error:', error);
+      const resp = error?.response;
+      if (resp && Array.isArray(resp.data)) {
+        setErrors(resp.data);
+        return;
       }
-      setErrors([error.response.data.mensaje || "Error al iniciar sesión"]);
+    const message = resp?.data?.mensaje || resp?.data || error.message || 'Error al iniciar sesión';
+    setErrors([typeof message === 'string' ? message : JSON.stringify(message)]);
     }
   };
 
