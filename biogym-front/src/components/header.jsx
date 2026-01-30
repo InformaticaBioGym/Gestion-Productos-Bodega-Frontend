@@ -9,7 +9,7 @@ function Header() {
   return (
     <header style={{
       backgroundColor: "#252525",
-      padding: "15px 20px",
+      padding: "0px 20px",
       display: "flex",
       justifyContent: "space-between",
       alignItems: "center",
@@ -36,7 +36,10 @@ function Header() {
               padding: "8px 12px",
               borderRadius: "5px",
               cursor: "pointer",
-              fontWeight: "bold"
+              fontWeight: "bold",
+              margin: 0,     
+              marginTop: 0,
+              height: "fit-content"
             }}
           >
             Salir
