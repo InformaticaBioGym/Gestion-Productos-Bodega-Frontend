@@ -1,7 +1,7 @@
 import api from "./axios.config";
 
 export const crearUsuarioRequest = async (usuario) => {
-  return await api.post("/auth/registrar", usuario); 
+  return await api.post("/auth/registrar", usuario);
 };
 
 export const obtenerUsuariosRequest = async () => {
@@ -17,5 +17,5 @@ export const eliminarUsuarioRequest = async (id) => {
 };
 
 export const editarUsuarioRequest = async (id, usuario) => {
-    return await api.put(`/usuarios/${id}`, usuario);
+  return await api.put(`/usuarios/${id}`, usuario);
 };

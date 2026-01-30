@@ -1,24 +1,46 @@
 import { useAuth } from "../context/auth.context.jsx";
+import { useNavigate } from "react-router-dom";
 import "./dashboard.page.css";
 import Header from "../components/header.jsx";
 import Footer from "../components/footer.jsx";
 
 function DashboardPage() {
-  const { logout, user } = useAuth();
+  const { user } = useAuth();
+  const navigate = useNavigate();
   // ADMINISTRADOR
   const menuAdmin = [
-    { title: "Usuarios", icon: "👥", action: () => console.log("Ir a usuarios") },
-    { title: "Productos", icon: "📦", action: () => console.log("Ir a productos") },
+    { title: "Usuarios", icon: "👥", action: () => navigate("/usuarios") },
+    {
+      title: "Productos",
+      icon: "📦",
+      action: () => console.log("Ir a productos"),
+    },
     { title: "Bodegas", icon: "🏭", action: () => console.log("Ir a bodegas") },
-    { title: "Ubicaciones", icon: "📍", action: () => console.log("Ir a ubicaciones") },
+    {
+      title: "Ubicaciones",
+      icon: "📍",
+      action: () => console.log("Ir a ubicaciones"),
+    },
   ];
 
   // TRABAJADOR
   const menuTrabajador = [
     { title: "Buscar", icon: "🔍", action: () => console.log("Ir a buscar") },
-    { title: "Editar Prod.", icon: "✏️", action: () => console.log("Ir a editar") },
-    { title: "Consultar", icon: "🧐", action: () => console.log("Ir a consultar") },
-    { title: "Mis Tareas", icon: "📋", action: () => console.log("Ir a tareas") }, 
+    {
+      title: "Editar Prod.",
+      icon: "✏️",
+      action: () => console.log("Ir a editar"),
+    },
+    {
+      title: "Consultar",
+      icon: "🧐",
+      action: () => console.log("Ir a consultar"),
+    },
+    {
+      title: "Mis Tareas",
+      icon: "📋",
+      action: () => console.log("Ir a tareas"),
+    },
   ];
   const menuActual = user?.rol === "administrador" ? menuAdmin : menuTrabajador;
 

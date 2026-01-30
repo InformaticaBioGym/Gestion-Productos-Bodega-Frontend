@@ -16,25 +16,31 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [errors, setErrors] = useState([]);
-  
-  const [loading, setLoading] = useState(true); 
+
+  const [loading, setLoading] = useState(true);
 
   const signin = async (user) => {
     try {
       const res = await loginRequest(user);
-      
+
       setUser(res.data.usuario);
       setIsAuthenticated(true);
-      localStorage.setItem("token", res.data.token); 
+      localStorage.setItem("token", res.data.token);
     } catch (error) {
-      console.error('signin error:', error);
+      console.error("signin error:", error);
       const resp = error?.response;
       if (resp && Array.isArray(resp.data)) {
         setErrors(resp.data);
         return;
       }
-    const message = resp?.data?.mensaje || resp?.data || error.message || 'Error al iniciar sesión';
-    setErrors([typeof message === 'string' ? message : JSON.stringify(message)]);
+      const message =
+        resp?.data?.mensaje ||
+        resp?.data ||
+        error.message ||
+        "Error al iniciar sesión";
+      setErrors([
+        typeof message === "string" ? message : JSON.stringify(message),
+      ]);
     }
   };
 
@@ -55,22 +61,22 @@ export const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     const checkLogin = () => {
-        const token = localStorage.getItem("token");
-        if (!token) {
-            setIsAuthenticated(false);
-            setLoading(false);
-            setUser(null);
-            return;
-        }
-        try {
-          const decoded = jwtDecode(token);          
-          setUser(decoded); 
-          setIsAuthenticated(true);
-        } catch (error) {
-          console.error("Token inválido", error);
-          logout();
-        }
+      const token = localStorage.getItem("token");
+      if (!token) {
+        setIsAuthenticated(false);
         setLoading(false);
+        setUser(null);
+        return;
+      }
+      try {
+        const decoded = jwtDecode(token);
+        setUser(decoded);
+        setIsAuthenticated(true);
+      } catch (error) {
+        console.error("Token inválido", error);
+        logout();
+      }
+      setLoading(false);
     };
     checkLogin();
   }, []);

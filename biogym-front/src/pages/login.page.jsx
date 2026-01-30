@@ -5,7 +5,11 @@ import { useNavigate } from "react-router-dom";
 import "./login.page.css";
 
 function LoginPage() {
-  const { register, handleSubmit, formState: { errors } } = useForm();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
   const { signin, isAuthenticated, errors: loginErrors } = useAuth();
   const navigate = useNavigate();
 
@@ -14,16 +18,19 @@ function LoginPage() {
   }, [isAuthenticated]);
 
   const onSubmit = handleSubmit(async (values) => {
-    signin(values); 
+    signin(values);
   });
 
-return (
-    <div className="login-container">      
+  return (
+    <div className="login-container">
       <div className="login-card">
         <h1>BioGym Inventario Acceso</h1>
-        
+
         {loginErrors.map((error, i) => (
-          <div key={i} style={{ color: "red", marginBottom: "10px", fontSize: "0.9rem" }}>
+          <div
+            key={i}
+            style={{ color: "red", marginBottom: "10px", fontSize: "0.9rem" }}
+          >
             {error}
           </div>
         ))}
@@ -35,7 +42,11 @@ return (
               placeholder="Correo electrónico"
               {...register("correo", { required: true })}
             />
-            {errors.correo && <span style={{color: "red", fontSize: "0.8rem"}}>Campo requerido</span>}
+            {errors.correo && (
+              <span style={{ color: "red", fontSize: "0.8rem" }}>
+                Campo requerido
+              </span>
+            )}
           </div>
 
           <div className="form-group">
@@ -44,13 +55,16 @@ return (
               placeholder="Contraseña"
               {...register("contraseña", { required: true })}
             />
-            {errors.contraseña && <span style={{color: "red", fontSize: "0.8rem"}}>Campo requerido</span>}
+            {errors.contraseña && (
+              <span style={{ color: "red", fontSize: "0.8rem" }}>
+                Campo requerido
+              </span>
+            )}
           </div>
 
           <button type="submit">Ingresar</button>
         </form>
       </div>
-      
     </div>
   );
 }
