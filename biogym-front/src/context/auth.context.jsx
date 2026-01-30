@@ -1,5 +1,6 @@
 import { createContext, useState, useContext, useEffect } from "react";
 import { loginRequest } from "../services/auth.service.js";
+import { jwtDecode } from "jwt-decode";
 
 export const AuthContext = createContext();
 
@@ -58,12 +59,17 @@ export const AuthProvider = ({ children }) => {
         if (!token) {
             setIsAuthenticated(false);
             setLoading(false);
+            setUser(null);
             return;
         }
-        
-        setIsAuthenticated(true);
-        // decodificar el token o pedir perfil al backend para llenar "user"
-        // Pero para empezar esto sirve.
+        try {
+          const decoded = jwtDecode(token);          
+          setUser(decoded); 
+          setIsAuthenticated(true);
+        } catch (error) {
+          console.error("Token inválido", error);
+          logout();
+        }
         setLoading(false);
     };
     checkLogin();

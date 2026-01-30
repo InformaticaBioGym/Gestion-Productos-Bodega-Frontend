@@ -1,24 +1,44 @@
 import { useAuth } from "../context/auth.context.jsx";
-import "./dashboard.page.css"; //
+import "./dashboard.page.css";
+import Header from "../components/header.jsx";
+import Footer from "../components/footer.jsx";
 
 function DashboardPage() {
   const { logout, user } = useAuth();
+  // ADMINISTRADOR
+  const menuAdmin = [
+    { title: "Usuarios", icon: "👥", action: () => console.log("Ir a usuarios") },
+    { title: "Productos", icon: "📦", action: () => console.log("Ir a productos") },
+    { title: "Bodegas", icon: "🏭", action: () => console.log("Ir a bodegas") },
+    { title: "Ubicaciones", icon: "📍", action: () => console.log("Ir a ubicaciones") },
+  ];
+
+  // TRABAJADOR
+  const menuTrabajador = [
+    { title: "Buscar", icon: "🔍", action: () => console.log("Ir a buscar") },
+    { title: "Editar Prod.", icon: "✏️", action: () => console.log("Ir a editar") },
+    { title: "Consultar", icon: "🧐", action: () => console.log("Ir a consultar") },
+    { title: "Mis Tareas", icon: "📋", action: () => console.log("Ir a tareas") }, 
+  ];
+  const menuActual = user?.rol === "administrador" ? menuAdmin : menuTrabajador;
 
   return (
     <div className="dashboard-container">
-      <h1 className="dashboard-title">Panel de Control BioGym</h1>
-      
-      <h2 className="dashboard-subtitle">
-        Hola, {user ? user.nombre : "Administrador"}
-      </h2>
-      
-      <p className="dashboard-text">
-        Selecciona una opción del menú para comenzar 
-      </p>
-
-      <button className="btn-logout" onClick={() => logout()}>
-        Cerrar Sesión
-      </button>
+      {/* HEADER */}
+      <Header />
+      {/* GRID */}
+      <main className="dashboard-content">
+        <div className="menu-grid">
+          {menuActual.map((item, index) => (
+            <div key={index} className="menu-card" onClick={item.action}>
+              <span className="card-icon">{item.icon}</span>
+              <span className="card-title">{item.title}</span>
+            </div>
+          ))}
+        </div>
+      </main>
+      {/* FOOTER */}
+      <Footer />
     </div>
   );
 }
