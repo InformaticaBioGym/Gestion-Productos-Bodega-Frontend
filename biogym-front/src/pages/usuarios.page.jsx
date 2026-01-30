@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import Header from "../components/header";
 import Footer from "../components/footer";
+import Modal from "../components/modal";
+import Table from "../components/table";
 import {
   obtenerUsuariosRequest,
   crearUsuarioRequest,
@@ -13,6 +15,7 @@ function UsuariosPage() {
   const [usuarios, setUsuarios] = useState([]);
   const [busqueda, setBusqueda] = useState("");
   const [cargando, setCargando] = useState(false);
+
   const [modalOpen, setModalOpen] = useState(false);
   const [modalTipo, setModalTipo] = useState(null);
   const [usuarioSeleccionado, setUsuarioSeleccionado] = useState(null);
@@ -49,7 +52,7 @@ function UsuariosPage() {
     e.preventDefault();
     try {
       await crearUsuarioRequest(nuevoUsuario);
-      alert("Usuario creado con éxito ✅");
+      alert("Usuario creado con éxito");
       cargarUsuarios();
       cerrarModal();
     } catch (error) {
@@ -61,32 +64,6 @@ function UsuariosPage() {
     }
   };
 
-  const handleEliminar = async (id) => {
-    if (
-      window.confirm("¿Estás seguro de que quieres eliminar a este usuario?")
-    ) {
-      try {
-        await eliminarUsuarioRequest(id);
-        alert("Usuario eliminado 🗑️");
-        cargarUsuarios();
-        cerrarModal();
-      } catch (error) {
-        console.error(error);
-        alert("No se pudo eliminar al usuario");
-      }
-    }
-  };
-
-  const irAEditar = () => {
-    setNuevoUsuario({
-      nombre: usuarioSeleccionado.nombre,
-      correo: usuarioSeleccionado.correo,
-      contraseña: "",
-      rol: usuarioSeleccionado.rol,
-    });
-    setModalTipo("edit");
-  };
-
   const handleEditarUsuario = async (e) => {
     e.preventDefault();
     try {
@@ -95,7 +72,7 @@ function UsuariosPage() {
         delete datosActualizados.contraseña;
       }
       await editarUsuarioRequest(usuarioSeleccionado.id, datosActualizados);
-      alert("Usuario actualizado correctamente ✅");
+      alert("Usuario actualizado correctamente");
       cargarUsuarios();
       cerrarModal();
     } catch (error) {
@@ -104,6 +81,22 @@ function UsuariosPage() {
         "Error al actualizar: " +
           (error.response?.data?.mensaje || "Error interno"),
       );
+    }
+  };
+
+  const handleEliminar = async () => {
+    if (
+      window.confirm("¿Estás seguro de que quieres eliminar a este usuario?")
+    ) {
+      try {
+        await eliminarUsuarioRequest(usuarioSeleccionado.id);
+        alert("Usuario eliminado");
+        cargarUsuarios();
+        cerrarModal();
+      } catch (error) {
+        console.error(error);
+        alert("No se pudo eliminar al usuario");
+      }
     }
   };
 
@@ -125,9 +118,35 @@ function UsuariosPage() {
     setModalOpen(true);
   };
 
+  const irAEditar = () => {
+    setNuevoUsuario({
+      nombre: usuarioSeleccionado.nombre,
+      correo: usuarioSeleccionado.correo,
+      contraseña: "",
+      rol: usuarioSeleccionado.rol,
+    });
+    setModalTipo("edit");
+  };
+
   const cerrarModal = () => {
     setModalOpen(false);
   };
+
+  const dibujarFilaUsuario = (usuario) => (
+    <div key={usuario.id} className="list-row">
+      <div className="user-data">
+        <span className="user-name">{usuario.nombre}</span>
+        <div className="user-subdata">
+          <span>{usuario.correo}</span>
+          <span className="divider">|</span>
+          <span>{usuario.rol}</span>
+        </div>
+      </div>
+      <button className="btn-view" onClick={() => abrirModalVer(usuario)}>
+        Ver
+      </button>
+    </div>
+  );
 
   const usuariosFiltrados = usuarios.filter((u) => {
     const nombre = (u.nombre || "").toLowerCase();
@@ -144,9 +163,8 @@ function UsuariosPage() {
         <div className="search-bar-container">
           <span className="search-icon">🔍</span>
           <input
-            type="text"
-            placeholder="Buscar usuario..."
             className="search-input"
+            placeholder="Buscar usuario..."
             value={busqueda}
             onChange={(e) => setBusqueda(e.target.value)}
           />
@@ -154,192 +172,157 @@ function UsuariosPage() {
         <div className="section-title">
           <h2>Gestión de Personal</h2>
         </div>
-        {/* TABLA DE USUARIOS */}
-        <div className="user-list-container">
-          <div className="list-header">
-            <span>Usuarios</span>
-            <button className="btn-add" onClick={abrirModalAgregar}>
-              Añadir +
-            </button>
-          </div>
-          <div className="list-body">
-            {cargando ? (
-              <p style={{ textAlign: "center", padding: "20px" }}>
-                Cargando...
-              </p>
-            ) : (
-              usuariosFiltrados.map((usuario) => (
-                <div key={usuario.id} className="list-row">
-                  <div className="user-data">
-                    <span className="user-name">{usuario.nombre}</span>
-                    <div className="user-subdata">
-                      <span className="user-correo">{usuario.correo}</span>
-                      <span className="divider">|</span>
-                      <span className="user-role-text">{usuario.rol}</span>
-                    </div>
-                  </div>
-                  <button
-                    className="btn-view"
-                    onClick={() => abrirModalVer(usuario)}
-                  >
-                    Ver
-                  </button>
-                </div>
-              ))
-            )}
-
-            {!cargando && usuariosFiltrados.length === 0 && (
-              <p
-                style={{ textAlign: "center", padding: "20px", color: "#999" }}
-              >
-                No se encontraron usuarios.
-              </p>
-            )}
-          </div>
-        </div>
+        {/* TABLA REUTILIZABLE */}
+        <Table
+          title="Usuarios"
+          data={usuariosFiltrados}
+          isLoading={cargando}
+          onAdd={abrirModalAgregar}
+          renderRow={dibujarFilaUsuario}
+        />
       </div>
-      {/* === MODALES === */}
-      {modalOpen && (
-        <div className="modal-overlay">
-          <div className="modal-content">
-            <button className="modal-close-x" onClick={cerrarModal}>
-              ×
-            </button>
-            {/* --- MODAL AÑADIR --- */}
-            {modalTipo === "add" && (
-              <>
-                <h3>Nuevo Trabajador</h3>
-                <form className="modal-form" onSubmit={handleCrearUsuario}>
-                  <label>Nombre Completo</label>
-                  <input
-                    type="text"
-                    name="nombre"
-                    required
-                    value={nuevoUsuario.nombre}
-                    onChange={handleInputChange}
-                    placeholder="Ej: Nombre Apellido"
-                  />
-                  <label>Correo Electrónico</label>
-                  <input
-                    type="email"
-                    name="correo"
-                    required
-                    value={nuevoUsuario.correo}
-                    onChange={handleInputChange}
-                    placeholder="Ej: correo@gmail.com"
-                  />
-                  <label>Contraseña</label>
-                  <input
-                    type="password"
-                    name="contraseña"
-                    required
-                    value={nuevoUsuario.contraseña}
-                    onChange={handleInputChange}
-                    placeholder="*********"
-                  />
-                  <label>Rol</label>
-                  <select
-                    name="rol"
-                    value={nuevoUsuario.rol}
-                    onChange={handleInputChange}
-                  >
-                    <option value="trabajador">Trabajador</option>
-                    <option value="administrador">Administrador</option>
-                  </select>
-                  <button type="submit" className="btn-save">
-                    Guardar Usuario
-                  </button>
-                </form>
-              </>
-            )}
-            {/* --- MODAL VER --- */}
-            {modalTipo === "view" && usuarioSeleccionado && (
-              <>
-                <h3>Detalle de Usuario</h3>
-                <div className="user-detail-info">
-                  <p>
-                    <strong>ID:</strong> {usuarioSeleccionado.id}
-                  </p>
-                  <p>
-                    <strong>Nombre:</strong> {usuarioSeleccionado.nombre}
-                  </p>
-                  <p>
-                    <strong>Correo:</strong> {usuarioSeleccionado.correo}
-                  </p>
-                  <p>
-                    <strong>Rol:</strong> {usuarioSeleccionado.rol}
-                  </p>
-                </div>
-                <div className="modal-actions">
-                  <button className="btn-edit" onClick={irAEditar}>
-                    Editar
-                  </button>
-                  <button
-                    className="btn-delete"
-                    onClick={() => handleEliminar(usuarioSeleccionado.id)}
-                  >
-                    Eliminar
-                  </button>
-                </div>
-              </>
-            )}
-            {/* --- MODAL EDITAR --- */}
-            {modalTipo === "edit" && (
-              <>
-                <h3>Editar Usuario</h3>
-                <form className="modal-form" onSubmit={handleEditarUsuario}>
-                  <label>Nombre Completo</label>
-                  <input
-                    type="text"
-                    name="nombre"
-                    required
-                    value={nuevoUsuario.nombre}
-                    onChange={handleInputChange}
-                  />
-                  <label>Correo Electrónico</label>
-                  <input
-                    type="email"
-                    name="correo"
-                    required
-                    value={nuevoUsuario.correo}
-                    onChange={handleInputChange}
-                  />
-                  <label>Contraseña (Opcional)</label>
-                  <input
-                    type="password"
-                    name="contraseña"
-                    value={nuevoUsuario.contraseña}
-                    onChange={handleInputChange}
-                    placeholder="Dejar vacía para no cambiar"
-                  />
-                  <label>Rol</label>
-                  <select
-                    name="rol"
-                    value={nuevoUsuario.rol}
-                    onChange={handleInputChange}
-                  >
-                    <option value="trabajador">Trabajador</option>
-                    <option value="administrador">Administrador</option>
-                  </select>
-                  {/* BOTONES ACEPTAR / CANCELAR */}
-                  <div className="modal-actions">
-                    <button type="submit" className="btn-accept">
-                      Aceptar
-                    </button>
-                    <button
-                      type="button"
-                      className="btn-cancel"
-                      onClick={cerrarModal}
-                    >
-                      Cancelar
-                    </button>
-                  </div>
-                </form>
-              </>
-            )}
-          </div>
-        </div>
-      )}
+      {/* MODAL REUTILIZABLE */}
+      <Modal isOpen={modalOpen} onClose={cerrarModal}>
+        {/* TÍTULO */}
+        <h3>
+          {modalTipo === "add" && "Nuevo Trabajador"}
+          {modalTipo === "edit" && "Editar Usuario"}
+          {modalTipo === "view" && "Detalle de Usuario"}
+        </h3>
+        {/* FORMULARIO agregar */}
+        {modalTipo === "add" && (
+          <form className="modal-form" onSubmit={handleCrearUsuario}>
+            <label>Nombre Completo</label>
+            <input
+              name="nombre"
+              value={nuevoUsuario.nombre}
+              onChange={handleInputChange}
+              required
+              placeholder="Ej: Nombre Apellido"
+            />
+
+            <label>Correo Electrónico</label>
+            <input
+              type="email"
+              name="correo"
+              value={nuevoUsuario.correo}
+              onChange={handleInputChange}
+              required
+              placeholder="Ej: correo@gmail.com"
+            />
+
+            <label>Contraseña</label>
+            <input
+              type="password"
+              name="contraseña"
+              value={nuevoUsuario.contraseña}
+              onChange={handleInputChange}
+              required
+              placeholder="*********"
+            />
+
+            <label>Rol</label>
+            <select
+              name="rol"
+              value={nuevoUsuario.rol}
+              onChange={handleInputChange}
+            >
+              <option value="trabajador">Trabajador</option>
+              <option value="administrador">Administrador</option>
+            </select>
+
+            <div className="modal-actions">
+              <button type="submit" className="btn-accept">
+                Guardar Usuario
+              </button>
+              <button
+                type="button"
+                className="btn-cancel"
+                onClick={cerrarModal}
+              >
+                Cancelar
+              </button>
+            </div>
+          </form>
+        )}
+
+        {/* FORMULARIO EDITAR */}
+        {modalTipo === "edit" && (
+          <form className="modal-form" onSubmit={handleEditarUsuario}>
+            <label>Nombre Completo</label>
+            <input
+              name="nombre"
+              value={nuevoUsuario.nombre}
+              onChange={handleInputChange}
+              required
+            />
+
+            <label>Correo Electrónico</label>
+            <input
+              type="email"
+              name="correo"
+              value={nuevoUsuario.correo}
+              onChange={handleInputChange}
+              required
+            />
+
+            <label>Contraseña (Opcional)</label>
+            <input
+              type="password"
+              name="contraseña"
+              value={nuevoUsuario.contraseña}
+              onChange={handleInputChange}
+              placeholder="Dejar vacía para no cambiar"
+            />
+
+            <label>Rol</label>
+            <select
+              name="rol"
+              value={nuevoUsuario.rol}
+              onChange={handleInputChange}
+            >
+              <option value="trabajador">Trabajador</option>
+              <option value="administrador">Administrador</option>
+            </select>
+            <div className="modal-actions">
+              <button type="submit" className="btn-accept">
+                Aceptar
+              </button>
+              <button
+                type="button"
+                className="btn-cancel"
+                onClick={cerrarModal}
+              >
+                Cancelar
+              </button>
+            </div>
+          </form>
+        )}
+        {/*VER  */}
+        {modalTipo === "view" && usuarioSeleccionado && (
+          <>
+            <div className="user-detail-info">
+              <p>
+                <strong>Nombre:</strong> {usuarioSeleccionado.nombre}
+              </p>
+              <p>
+                <strong>Correo:</strong> {usuarioSeleccionado.correo}
+              </p>
+              <p>
+                <strong>Rol:</strong> {usuarioSeleccionado.rol}
+              </p>
+            </div>
+            <div className="modal-actions">
+              <button className="btn-edit" onClick={irAEditar}>
+                Editar
+              </button>
+              <button className="btn-delete" onClick={handleEliminar}>
+                Eliminar
+              </button>
+            </div>
+          </>
+        )}
+      </Modal>
       <Footer />
     </div>
   );

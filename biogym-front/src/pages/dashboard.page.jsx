@@ -13,9 +13,11 @@ function DashboardPage() {
     {
       title: "Productos",
       icon: "📦",
-      action: () => console.log("Ir a productos"),
+      action: () => navigate("/productos"),
     },
-    { title: "Bodegas", icon: "🏭", action: () => console.log("Ir a bodegas") },
+    { title: "Bodegas",
+      icon: "🏭",
+      action: () => console.log("Ir a bodegas") },
     {
       title: "Ubicaciones",
       icon: "📍",
@@ -25,22 +27,26 @@ function DashboardPage() {
 
   // TRABAJADOR
   const menuTrabajador = [
-    { title: "Buscar", icon: "🔍", action: () => console.log("Ir a buscar") },
-    {
-      title: "Editar Prod.",
-      icon: "✏️",
-      action: () => console.log("Ir a editar"),
+    { 
+      title: "Productos",
+      icon: "📦", 
+      action: () => navigate("/productos") 
     },
-    {
-      title: "Consultar",
-      icon: "🧐",
-      action: () => console.log("Ir a consultar"),
+    { 
+      title: "Buscar", 
+      icon: "🔍", 
+      action: () => console.log("Ir a buscar")
     },
-    {
-      title: "Mis Tareas",
-      icon: "📋",
-      action: () => console.log("Ir a tareas"),
-    },
+    { 
+      title: "Mis Tareas", 
+      icon: "📋", 
+      action: () => console.log("Ir a tareas") 
+    }, 
+    { 
+      title: "Mi Perfil", 
+      icon: "👤", 
+      action: () => console.log("Ir a perfil") 
+    }
   ];
   const menuActual = user?.rol === "administrador" ? menuAdmin : menuTrabajador;
 
