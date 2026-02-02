@@ -15,9 +15,7 @@ function DashboardPage() {
       icon: "📦",
       action: () => navigate("/productos"),
     },
-    { title: "Bodegas",
-      icon: "🏭",
-      action: () => console.log("Ir a bodegas") },
+    { title: "Bodegas", icon: "🏭", action: () => console.log("Ir a bodegas") },
     {
       title: "Ubicaciones",
       icon: "📍",

@@ -46,14 +46,18 @@ function UbicacionesPage() {
 
   const [imgModalUrl, setImgModalUrl] = useState(null);
 
-  const cargarDatos = async () => {
+  const cargarDatos = async (termino = "") => {
     try {
       setCargando(true);
       try {
-        const resUbi = await obtenerUbicacionesRequest();
+        const resUbi = await obtenerUbicacionesRequest(termino);
         setUbicaciones(Array.isArray(resUbi.data) ? resUbi.data : []);
       } catch (e) {
-        console.error("Error al cargar ubicaciones:", e);
+        if (e.response?.status === 404) {
+          setUbicaciones([]);
+        } else {
+          console.error("Error al cargar ubicaciones:", e);
+        }
       }
       try {
         const resProd = await obtenerProductosRequest();
@@ -230,22 +234,21 @@ function UbicacionesPage() {
     }
   };
 
-  const ubicacionesFiltradas = ubicaciones.filter((u) => {
-    const termino = busqueda.toLowerCase();
-    const nombreProd = (u.producto?.nombre || "").toLowerCase();
-    const skuProd = (u.producto?.sku || "").toLowerCase();
-    return nombreProd.includes(termino) || skuProd.includes(termino);
-  });
-
   return (
     <div className="page-container">
       <Header />
       <div className="content-scroll">
         <div className="search-bar-container">
-          <span className="search-icon">🔍</span>
+          <span
+            className="search-icon"
+            onClick={() => cargarDatos(busqueda)}
+            style={{ cursor: "pointer" }}
+          >
+            🔍
+          </span>
           <input
             className="search-input"
-            placeholder="Buscar en mapa (Producto/SKU)..."
+            placeholder="Buscar (Producto/SKU)..."
             value={busqueda}
             onChange={(e) => setBusqueda(e.target.value)}
           />
@@ -256,7 +259,7 @@ function UbicacionesPage() {
 
         <Table
           title="Ubicaciones"
-          data={ubicacionesFiltradas}
+          data={ubicaciones}
           isLoading={cargando}
           onAdd={abrirModalAdd}
           renderRow={dibujarFila}
@@ -363,26 +366,28 @@ function UbicacionesPage() {
             <input type="file" accept="image/*" onChange={handleFileChange} />
 
             <div className="modal-actions">
-              <button 
-                type="submit" 
+              <button
+                type="submit"
                 className="btn-accept"
-                disabled={enviando} // Deshabilita el click
-                style={{ 
-                    opacity: enviando ? 0.7 : 1, 
-                    cursor: enviando ? 'not-allowed' : 'pointer',
-                    display: 'flex', 
-                    justifyContent: 'center', 
-                    alignItems: 'center',
-                    gap: '10px'
+                disabled={enviando}
+                style={{
+                  opacity: enviando ? 0.7 : 1,
+                  cursor: enviando ? "not-allowed" : "pointer",
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  gap: "10px",
                 }}
               >
                 {enviando ? (
-                <>
-                    <span style={{animation: "spin 1s linear infinite"}}>⏳</span> 
+                  <>
+                    <span style={{ animation: "spin 1s linear infinite" }}>
+                      ⏳
+                    </span>
                     Guardando...
-                </>
+                  </>
                 ) : (
-                    "Guardar"
+                  "Guardar"
                 )}
               </button>
               <button

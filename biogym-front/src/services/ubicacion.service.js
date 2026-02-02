@@ -1,7 +1,8 @@
 import api from "./axios.config";
 
-export const obtenerUbicacionesRequest = async () => {
-  return await api.get("/ubicaciones");
+export const obtenerUbicacionesRequest = async (busqueda) => {
+  const url = busqueda ? `/ubicaciones?busqueda=${busqueda}` : "/ubicaciones";
+  return await api.get(url);
 };
 
 export const crearUbicacionRequest = async (formData) => {
