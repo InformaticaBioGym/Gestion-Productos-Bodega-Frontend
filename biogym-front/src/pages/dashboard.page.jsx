@@ -21,32 +21,32 @@ function DashboardPage() {
     {
       title: "Ubicaciones",
       icon: "📍",
-      action: () => console.log("Ir a ubicaciones"),
+      action: () => navigate("/ubicaciones"),
     },
   ];
 
   // TRABAJADOR
   const menuTrabajador = [
-    { 
-      title: "Productos",
-      icon: "📦", 
-      action: () => navigate("/productos") 
+    {
+      title: "Editar productos",
+      icon: "📦",
+      action: () => navigate("/productos"),
     },
-    { 
-      title: "Buscar", 
-      icon: "🔍", 
-      action: () => console.log("Ir a buscar")
+    {
+      title: "Ubicación producto",
+      icon: "📍",
+      action: () => navigate("/ubicaciones"),
     },
-    { 
-      title: "Mis Tareas", 
-      icon: "📋", 
-      action: () => console.log("Ir a tareas") 
-    }, 
-    { 
-      title: "Mi Perfil", 
-      icon: "👤", 
-      action: () => console.log("Ir a perfil") 
-    }
+    {
+      title: "Bodegas",
+      icon: "🏭",
+      action: () => console.log("Ir a tareas"),
+    },
+    {
+      title: "Mi Perfil",
+      icon: "👤",
+      action: () => console.log("Ir a perfil"),
+    },
   ];
   const menuActual = user?.rol === "administrador" ? menuAdmin : menuTrabajador;
 

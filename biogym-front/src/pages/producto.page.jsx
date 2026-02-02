@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import Header from "../components/header";
 import Footer from "../components/footer";
 import Modal from "../components/modal";
-import Table from "../components/table"; 
+import Table from "../components/table";
 import { useAuth } from "../context/auth.context";
 import {
   obtenerProductosRequest,
@@ -20,7 +20,7 @@ function ProductosPage() {
   const [cargando, setCargando] = useState(false);
 
   const [modalOpen, setModalOpen] = useState(false);
-  const [modalTipo, setModalTipo] = useState(null); 
+  const [modalTipo, setModalTipo] = useState(null);
   const [prodSeleccionado, setProdSeleccionado] = useState(null);
 
   const [formProd, setFormProd] = useState({
@@ -117,7 +117,9 @@ function ProductosPage() {
       <div className="content-scroll">
         {/* BUSCADOR */}
         <div className="search-bar-container">
-          <span className="search-icon" onClick={cargarProductos}>🔍</span>
+          <span className="search-icon" onClick={cargarProductos}>
+            🔍
+          </span>
           <input
             type="text"
             placeholder="Buscar por SKU o Nombre (Enter)..."
@@ -128,13 +130,15 @@ function ProductosPage() {
           />
         </div>
 
-        <div className="section-title"><h2>Inventario</h2></div>
-        <Table 
-            title="Productos"
-            data={productos}
-            isLoading={cargando}
-            onAdd={abrirModalAdd} 
-            renderRow={dibujarFilaProducto}
+        <div className="section-title">
+          <h2>Inventario</h2>
+        </div>
+        <Table
+          title="Productos"
+          data={productos}
+          isLoading={cargando}
+          onAdd={abrirModalAdd}
+          renderRow={dibujarFilaProducto}
         />
       </div>
       <Modal isOpen={modalOpen} onClose={cerrarModal}>
@@ -148,25 +152,33 @@ function ProductosPage() {
         {(modalTipo === "add" || modalTipo === "edit") && (
           <form className="modal-form" onSubmit={handleGuardar}>
             <label>SKU </label>
-            <input 
-                name="sku" 
-                value={formProd.sku} 
-                onChange={handleInputChange} 
-                required 
-                placeholder="Ej: PROD-123"
+            <input
+              name="sku"
+              value={formProd.sku}
+              onChange={handleInputChange}
+              required
+              placeholder="Ej: PROD-123"
             />
 
             <label>Nombre</label>
-            <input 
-                name="nombre" 
-                value={formProd.nombre} 
-                onChange={handleInputChange} 
-                required 
-                placeholder="Ej: Mancuerna 10kg"
+            <input
+              name="nombre"
+              value={formProd.nombre}
+              onChange={handleInputChange}
+              required
+              placeholder="Ej: Mancuerna 10kg"
             />
             <div className="modal-actions">
-              <button type="submit" className="btn-accept">Guardar</button>
-              <button type="button" className="btn-cancel" onClick={cerrarModal}>Cancelar</button>
+              <button type="submit" className="btn-accept">
+                Guardar
+              </button>
+              <button
+                type="button"
+                className="btn-cancel"
+                onClick={cerrarModal}
+              >
+                Cancelar
+              </button>
             </div>
           </form>
         )}
@@ -174,14 +186,22 @@ function ProductosPage() {
         {modalTipo === "view" && prodSeleccionado && (
           <>
             <div className="user-detail-info">
-              <p><strong>SKU:</strong> {prodSeleccionado.sku}</p>
-              <p><strong>Nombre:</strong> {prodSeleccionado.nombre}</p>
+              <p>
+                <strong>SKU:</strong> {prodSeleccionado.sku}
+              </p>
+              <p>
+                <strong>Nombre:</strong> {prodSeleccionado.nombre}
+              </p>
             </div>
 
             <div className="modal-actions">
-              <button className="btn-edit" onClick={irAEditar}>Editar</button>              
+              <button className="btn-edit" onClick={irAEditar}>
+                Editar
+              </button>
               {user.rol === "administrador" && (
-                <button className="btn-delete" onClick={handleEliminar}>Eliminar</button>
+                <button className="btn-delete" onClick={handleEliminar}>
+                  Eliminar
+                </button>
               )}
             </div>
           </>
