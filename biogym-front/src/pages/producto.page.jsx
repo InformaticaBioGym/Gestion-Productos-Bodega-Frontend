@@ -28,10 +28,10 @@ function ProductosPage() {
     nombre: "",
   });
 
-  const cargarProductos = async () => {
+  const cargarProductos = async (termino = "") => {
     try {
       setCargando(true);
-      const res = await obtenerProductosRequest(busqueda);
+      const res = await obtenerProductosRequest(termino);
       setProductos(res.data);
     } catch (error) {
       console.error(error);
@@ -92,7 +92,7 @@ function ProductosPage() {
         await editarProductoRequest(prodSeleccionado.id, formProd);
         alert("Producto actualizado");
       }
-      cargarProductos();
+      cargarProductos(busqueda);
       cerrarModal();
     } catch (error) {
       alert("Error: " + (error.response?.data?.mensaje || "Error interno"));
@@ -117,7 +117,11 @@ function ProductosPage() {
       <div className="content-scroll">
         {/* BUSCADOR */}
         <div className="search-bar-container">
-          <span className="search-icon" onClick={cargarProductos}>
+          <span 
+            className="search-icon" 
+            onClick={() => cargarProductos(busqueda)}
+            style={{ cursor: "pointer" }}
+          >
             🔍
           </span>
           <input
@@ -126,7 +130,7 @@ function ProductosPage() {
             className="search-input"
             value={busqueda}
             onChange={(e) => setBusqueda(e.target.value)}
-            onKeyDown={(e) => e.key === "Enter" && cargarProductos()}
+            onKeyDown={(e) => e.key === "Enter" && cargarProductos(busqueda)}
           />
         </div>
 

@@ -251,6 +251,7 @@ function UbicacionesPage() {
             placeholder="Buscar (Producto/SKU)..."
             value={busqueda}
             onChange={(e) => setBusqueda(e.target.value)}
+            onKeyDown={(e) => e.key === "Enter" && cargarDatos(busqueda)}
           />
         </div>
         <div className="section-title">
