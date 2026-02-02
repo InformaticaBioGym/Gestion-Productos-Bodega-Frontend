@@ -22,6 +22,7 @@ function UbicacionesPage() {
 
   const [busqueda, setBusqueda] = useState("");
   const [cargando, setCargando] = useState(false);
+  const [enviando, setEnviando] = useState(false);
 
   // Modal
   const [modalOpen, setModalOpen] = useState(false);
@@ -191,7 +192,10 @@ function UbicacionesPage() {
     e.preventDefault();
     if (!form.producto_id) return alert("Debes seleccionar un producto");
 
+    if (enviando) return;
+
     try {
+      setEnviando(true);
       const formData = new FormData();
       formData.append("producto_id", form.producto_id);
       formData.append("bodega_id", form.bodega_id);
@@ -206,10 +210,12 @@ function UbicacionesPage() {
         await editarUbicacionRequest(ubicacionSel.id, formData);
         alert("Actualizado");
       }
-      cargarDatos();
       setModalOpen(false);
+      cargarDatos();
     } catch (error) {
       alert("Error: " + (error.response?.data?.mensaje || "Error interno"));
+    } finally {
+      setEnviando(false);
     }
   };
 
@@ -266,7 +272,7 @@ function UbicacionesPage() {
             ? "Nueva Ubicación"
             : modalTipo === "edit"
               ? "Editar"
-              : "Detalle"
+              : "Descripcion"
         }
       >
         {(modalTipo === "add" || modalTipo === "edit") && (
@@ -357,8 +363,27 @@ function UbicacionesPage() {
             <input type="file" accept="image/*" onChange={handleFileChange} />
 
             <div className="modal-actions">
-              <button type="submit" className="btn-accept">
-                Guardar
+              <button 
+                type="submit" 
+                className="btn-accept"
+                disabled={enviando} // Deshabilita el click
+                style={{ 
+                    opacity: enviando ? 0.7 : 1, 
+                    cursor: enviando ? 'not-allowed' : 'pointer',
+                    display: 'flex', 
+                    justifyContent: 'center', 
+                    alignItems: 'center',
+                    gap: '10px'
+                }}
+              >
+                {enviando ? (
+                <>
+                    <span style={{animation: "spin 1s linear infinite"}}>⏳</span> 
+                    Guardando...
+                </>
+                ) : (
+                    "Guardar"
+                )}
               </button>
               <button
                 type="button"
@@ -393,7 +418,7 @@ function UbicacionesPage() {
                 Estante {ubicacionSel.estante}
               </p>
               <p>
-                <strong>Detalle:</strong> {ubicacionSel.descripcion}
+                <strong>Descripción:</strong> {ubicacionSel.descripcion}
               </p>
             </div>
             <div className="modal-actions">
