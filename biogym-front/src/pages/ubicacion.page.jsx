@@ -254,7 +254,7 @@ function UbicacionesPage() {
           </span>
           <input
             className="search-input"
-            placeholder="Buscar (Producto/SKU)..."
+            placeholder="Buscar por nombre o SKU (Enter)..."
             value={busqueda}
             onChange={(e) => setBusqueda(e.target.value)}
             onKeyDown={(e) => e.key === "Enter" && cargarDatos(busqueda)}
