@@ -203,9 +203,14 @@ function UbicacionesPage() {
       const formData = new FormData();
       formData.append("producto_id", form.producto_id);
       formData.append("bodega_id", form.bodega_id);
-      formData.append("estante", form.estante);
       formData.append("descripcion", form.descripcion);
-      if (form.foto instanceof File) formData.append("foto", form.foto);
+
+      if (form.estante) {
+        formData.append("estante", form.estante);
+      }
+      if (form.foto instanceof File) {
+        formData.append("foto", form.foto);
+      }
 
       if (modalTipo === "add") {
         await crearUbicacionRequest(formData);
@@ -349,7 +354,7 @@ function UbicacionesPage() {
               name="estante"
               value={form.estante}
               onChange={handleInputChange}
-              required
+              placeholder="1, 2, 3... si no dejar vacío (opcional)"
             />
 
             <label>Referencia/Descripción</label>
@@ -357,7 +362,7 @@ function UbicacionesPage() {
               name="descripcion"
               value={form.descripcion}
               onChange={handleInputChange}
-              placeholder="Ej: Frente al estante 3"
+              placeholder="Ej: Frente al estante 3 (opcional)"
             />
 
             <label>Foto del lugar</label>
@@ -420,11 +425,18 @@ function UbicacionesPage() {
               </p>{" "}
               {/* AGREGADO SKU */}
               <p>
-                <strong>Ubicación:</strong> {ubicacionSel.bodega?.nombre} -
-                Estante {ubicacionSel.estante}
+                <strong>Ubicación:</strong> {ubicacionSel.bodega?.nombre}
+                {ubicacionSel.estante && ` - Estante ${ubicacionSel.estante}`}
               </p>
               <p>
-                <strong>Descripción:</strong> {ubicacionSel.descripcion}
+                <strong>Descripción:</strong>{" "}
+                {ubicacionSel.descripcion ? (
+                  ubicacionSel.descripcion
+                ) : (
+                  <span style={{ color: "#999", fontStyle: "italic" }}>
+                    No especificada
+                  </span>
+                )}
               </p>
             </div>
             <div className="modal-actions">
