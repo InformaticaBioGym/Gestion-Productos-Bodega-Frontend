@@ -117,8 +117,8 @@ function ProductosPage() {
       <div className="content-scroll">
         {/* BUSCADOR */}
         <div className="search-bar-container">
-          <span 
-            className="search-icon" 
+          <span
+            className="search-icon"
             onClick={() => cargarProductos(busqueda)}
             style={{ cursor: "pointer" }}
           >

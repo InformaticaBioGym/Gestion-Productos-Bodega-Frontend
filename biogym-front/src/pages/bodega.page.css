@@ -1,4 +1,3 @@
-/* === ESTRUCTURA PRINCIPAL === */
 .page-container {
   display: flex;
   flex-direction: column;
@@ -12,6 +11,8 @@
   padding: 15px;
   padding-bottom: 80px;
 }
+
+/* Buscador */
 .search-bar-container {
   background-color: white;
   border-radius: 25px;
@@ -26,6 +27,7 @@
   margin-right: 10px;
   color: #666;
   font-size: 1.2rem;
+  cursor: pointer;
 }
 .search-input {
   border: none;
@@ -33,6 +35,7 @@
   width: 100%;
   font-size: 1rem;
 }
+
 .section-title h2 {
   text-align: center;
   color: #333;
@@ -42,7 +45,7 @@
   font-weight: 600;
 }
 
-/* === TABLA === */
+/* Fila */
 .list-row {
   padding: 12px 15px;
   border-bottom: 1px solid #eee;
@@ -50,22 +53,10 @@
   justify-content: space-between;
   align-items: center;
 }
-/* Contenedor de datos y foto */
-.ubi-data-row {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-  gap: 15px;
-  flex: 1;
-  margin-right: 15px;
-}
-
-.text-info {
+.user-data {
   display: flex;
   flex-direction: column;
   gap: 2px;
-  text-align: left;
 }
 .user-name {
   font-weight: bold;
@@ -73,32 +64,16 @@
   color: #222;
 }
 .user-subdata {
-  font-size: 0.85rem;
-  color: #666;
   display: flex;
-  gap: 5px;
-  flex-wrap: wrap;
   align-items: center;
+  gap: 5px;
+  font-size: 0.8rem;
+  color: #666;
 }
 .divider {
   color: #ccc;
 }
 
-/* Foto Miniatura */
-.table-thumb {
-  width: 70px;
-  height: 70px;
-  border-radius: 6px;
-  object-fit: cover;
-  border: 1px solid #ccc;
-  background-color: #f0f0f0;
-  cursor: zoom-in;
-  transition: transform 0.2s;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-.table-thumb:hover {
-  transform: scale(1.1);
-}
 .btn-view {
   background-color: #fef131;
   color: #333;
@@ -109,96 +84,29 @@
   font-size: 0.8rem;
   cursor: pointer;
   width: fit-content;
+  min-width: auto;
   flex-shrink: 0;
 }
 
-/* === MODALES Y FORMULARIOS === */
+/* Modal */
 .modal-form {
   display: flex;
   flex-direction: column;
   gap: 12px;
-  position: relative;
 }
 .modal-form label {
   font-size: 0.85rem;
   font-weight: bold;
   color: #555;
-  margin-bottom: -5px;
 }
 .modal-form input,
-.modal-form select,
-.modal-form textarea {
+.modal-form select {
   padding: 10px;
   border: 1px solid #ddd;
   border-radius: 6px;
   font-size: 1rem;
 }
 
-/* --- AUTOCOMPLETE --- */
-.autocomplete-container {
-  position: relative;
-}
-.suggestions-list {
-  position: absolute;
-  top: 100%;
-  left: 0;
-  right: 0;
-  background: white;
-  border: 1px solid #ddd;
-  border-top: none;
-  border-radius: 0 0 6px 6px;
-  max-height: 200px;
-  overflow-y: auto;
-  z-index: 10;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
-.suggestion-item {
-  padding: 10px;
-  cursor: pointer;
-  border-bottom: 1px solid #eee;
-  font-size: 0.9rem;
-}
-.suggestion-item:hover {
-  background-color: #f5f5f5;
-}
-.selected-product-badge {
-  background-color: #e3f2fd;
-  color: #1565c0;
-  padding: 8px;
-  border-radius: 6px;
-  font-size: 0.9rem;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  border: 1px solid #90caf9;
-}
-.remove-product {
-  cursor: pointer;
-  font-weight: bold;
-  padding: 0 5px;
-}
-
-/* Imagenes en Modales */
-.image-preview {
-  width: 100%;
-  height: 150px;
-  object-fit: contain;
-  border: 2px dashed #ccc;
-  border-radius: 8px;
-  margin-bottom: 10px;
-  background-color: #f9f9f9;
-}
-.detail-image {
-  width: 100%;
-  height: 200px;
-  object-fit: cover;
-  border-radius: 8px;
-  margin-bottom: 15px;
-  border: 1px solid #ddd;
-  cursor: zoom-in;
-}
-
-/* Info Detalle */
 .user-detail-info {
   background-color: #f9f9f9;
   padding: 15px;
@@ -210,7 +118,6 @@
   color: #444;
 }
 
-/* Botones */
 .modal-actions {
   display: flex;
   gap: 10px;
@@ -255,13 +162,4 @@
   border-radius: 6px;
   font-weight: bold;
   cursor: pointer;
-}
-
-/* --- MODAL DE IMAGEN --- */
-.lightbox-image {
-  width: 100%;
-  height: auto;
-  max-height: 80vh;
-  object-fit: contain;
-  border-radius: 8px;
 }

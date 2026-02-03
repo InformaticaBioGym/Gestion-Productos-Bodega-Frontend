@@ -9,13 +9,17 @@ function DashboardPage() {
   const navigate = useNavigate();
   // ADMINISTRADOR
   const menuAdmin = [
-    { title: "Usuarios", icon: "👥", action: () => navigate("/usuarios") },
+    { title: "Usuarios", 
+      icon: "👥", 
+      action: () => navigate("/usuarios") },
     {
       title: "Productos",
       icon: "📦",
       action: () => navigate("/productos"),
     },
-    { title: "Bodegas", icon: "🏭", action: () => console.log("Ir a bodegas") },
+    { title: "Bodegas", 
+      icon: "🏭", 
+      action: () => navigate("/bodegas") },
     {
       title: "Ubicaciones",
       icon: "📍",
@@ -38,7 +42,7 @@ function DashboardPage() {
     {
       title: "Bodegas",
       icon: "🏭",
-      action: () => console.log("Ir a tareas"),
+      action: () => navigate("/bodegas"),
     },
     {
       title: "Mi Perfil",
