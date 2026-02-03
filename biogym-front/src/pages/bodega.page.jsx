@@ -183,6 +183,7 @@ function BodegasPage() {
               value={form.n_estantes}
               onChange={handleInputChange}
               required
+              placeholder="1, 2, 3..."
             />
 
             <div className="modal-actions">
