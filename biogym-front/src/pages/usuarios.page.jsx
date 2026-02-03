@@ -57,10 +57,8 @@ function UsuariosPage() {
       cerrarModal();
     } catch (error) {
       console.error(error);
-      alert(
-        "Error al crear usuario: " +
-          (error.response?.data?.mensaje || "Error interno"),
-      );
+      const errorMsg = error.response?.data?.detalle || error.response?.data?.mensaje || "Error interno";
+      alert("Error al crear usuario: " + errorMsg);
     }
   };
 
@@ -77,10 +75,8 @@ function UsuariosPage() {
       cerrarModal();
     } catch (error) {
       console.error(error);
-      alert(
-        "Error al actualizar: " +
-          (error.response?.data?.mensaje || "Error interno"),
-      );
+      const errorMsg = error.response?.data?.detalle || error.response?.data?.mensaje || "Error interno";
+      alert("Error al actualizar: " + errorMsg);
     }
   };
 
@@ -155,6 +151,13 @@ function UsuariosPage() {
     return nombre.includes(termino) || correo.includes(termino);
   });
 
+  const handleNombreChange = (e) => {
+    const valor = e.target.value;
+    if (/^[a-zA-ZÀ-ÿ\u00f1\u00d1\s]*$/.test(valor)) {
+      setNuevoUsuario({ ...nuevoUsuario, nombre: valor });
+    }
+  };
+
   return (
     <div className="page-container">
       <Header />
@@ -196,7 +199,7 @@ function UsuariosPage() {
             <input
               name="nombre"
               value={nuevoUsuario.nombre}
-              onChange={handleInputChange}
+              onChange={handleNombreChange}
               required
               placeholder="Ej: Nombre Apellido"
             />
@@ -253,7 +256,7 @@ function UsuariosPage() {
             <input
               name="nombre"
               value={nuevoUsuario.nombre}
-              onChange={handleInputChange}
+              onChange={handleNombreChange}
               required
             />
 

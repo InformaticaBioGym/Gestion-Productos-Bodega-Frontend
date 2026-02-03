@@ -99,7 +99,8 @@ function BodegasPage() {
       cargarBodegas();
       setModalOpen(false);
     } catch (error) {
-      alert("Error: " + (error.response?.data?.mensaje || "Error interno"));
+      const msg = error.response?.data?.detalle || error.response?.data?.mensaje || "Error interno";
+      alert("Error: " + msg);
     }
   };
 
