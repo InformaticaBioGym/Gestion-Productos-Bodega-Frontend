@@ -186,7 +186,7 @@ function ProductosPage() {
             </div>
           </form>
         )}
-        {/* VER) */}
+        {/* VER */}
         {modalTipo === "view" && prodSeleccionado && (
           <>
             <div className="user-detail-info">
