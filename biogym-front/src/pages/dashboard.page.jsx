@@ -15,7 +15,9 @@ function DashboardPage() {
       icon: "📦",
       action: () => navigate("/productos"),
     },
-    { title: "Bodegas", icon: "🏭", action: () => navigate("/bodegas") },
+    { title: "Bodegas",
+      icon: "🏭",
+      action: () => navigate("/bodegas") },
     {
       title: "Ubicaciones",
       icon: "📍",
