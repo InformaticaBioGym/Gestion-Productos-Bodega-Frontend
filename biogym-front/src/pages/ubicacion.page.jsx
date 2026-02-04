@@ -12,6 +12,7 @@ import {
 import { obtenerProductosRequest } from "../services/producto.service";
 import { obtenerBodegasRequest } from "../services/bodega.service";
 import "./ubicacion.page.css";
+import { toast } from "sonner";
 
 const API_URL = import.meta.env.VITE_API_BACKEND_URL;
 
@@ -73,6 +74,7 @@ function UbicacionesPage() {
       }
     } catch (error) {
       console.error("Error general:", error);
+      toast.error("Error al cargar los datos. Intenta recargar la página.");
     } finally {
       setCargando(false);
     }
@@ -194,7 +196,10 @@ function UbicacionesPage() {
 
   const handleGuardar = async (e) => {
     e.preventDefault();
-    if (!form.producto_id) return alert("Debes seleccionar un producto");
+    if (!form.producto_id) {
+      toast.warning("Debes seleccionar un producto de la lista");
+      return;
+    }
 
     if (enviando) return;
 
@@ -214,30 +219,43 @@ function UbicacionesPage() {
 
       if (modalTipo === "add") {
         await crearUbicacionRequest(formData);
-        alert("Guardado");
+        toast.success("¡Ubicación registrada correctamente!");
       } else {
         await editarUbicacionRequest(ubicacionSel.id, formData);
-        alert("Actualizado");
+        toast.success("Ubicación actualizada con éxito");
       }
       setModalOpen(false);
       cargarDatos();
     } catch (error) {
-      const msg = error.response?.data?.detalle || error.response?.data?.mensaje || "Error interno";
-      alert("Error: " + msg);
+      const msg =
+        error.response?.data?.detalle ||
+        error.response?.data?.mensaje ||
+        "Error interno";
+      toast.error("No se pudo guardar: " + msg);
     } finally {
       setEnviando(false);
     }
   };
 
   const handleEliminar = async () => {
-    if (!window.confirm("¿Eliminar ubicación?")) return;
-    try {
-      await eliminarUbicacionRequest(ubicacionSel.id);
-      cargarDatos();
-      setModalOpen(false);
-    } catch (e) {
-      alert("Error al eliminar");
-    }
+    toast("¿Estás seguro de eliminar esta ubicación?", {
+      action: {
+        label: "Eliminar",
+        onClick: async () => {
+          try {
+            await eliminarUbicacionRequest(ubicacionSel.id);
+            toast.success("Ubicación eliminada correctamente");
+            cargarDatos();
+            setModalOpen(false);
+          } catch (e) {
+            toast.error("Error al eliminar la ubicación");
+          }
+        },
+      },
+      cancel: {
+        label: "Cancelar",
+      },
+    });
   };
 
   return (

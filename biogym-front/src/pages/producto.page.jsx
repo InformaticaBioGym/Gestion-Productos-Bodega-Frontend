@@ -11,6 +11,7 @@ import {
   eliminarProductoRequest,
 } from "../services/producto.service";
 import "./producto.page.css";
+import { toast } from "sonner";
 
 function ProductosPage() {
   const { user } = useAuth();
@@ -87,29 +88,39 @@ function ProductosPage() {
     try {
       if (modalTipo === "add") {
         await crearProductoRequest(formProd);
-        alert("Producto creado");
+        toast.success("Producto creado correctamente");
       } else {
         await editarProductoRequest(prodSeleccionado.id, formProd);
-        alert("Producto actualizado");
+        toast.success("Producto actualizado correctamente");
       }
       cargarProductos(busqueda);
       cerrarModal();
     } catch (error) {
-      const msg = error.response?.data?.detalle || error.response?.data?.mensaje || "Error interno";
-      alert("Error: " + msg);
+      const msg =
+        error.response?.data?.detalle ||
+        error.response?.data?.mensaje ||
+        "Error interno";
+      toast.error("Error: " + msg);
     }
   };
 
   const handleEliminar = async () => {
-    if (!window.confirm("¿Seguro que deseas eliminar este producto?")) return;
-    try {
-      await eliminarProductoRequest(prodSeleccionado.id);
-      alert("Producto eliminado");
-      cargarProductos();
-      cerrarModal();
-    } catch (error) {
-      alert("Error al eliminar");
-    }
+    toast("¿Seguro que deseas eliminar este producto?", {
+      action: {
+        label: "Eliminar",
+        onClick: async () => {
+          try {
+            await eliminarProductoRequest(prodSeleccionado.id);
+            toast.success("Producto eliminado");
+            cargarProductos();
+            cerrarModal();
+          } catch (error) {
+            toast.error("Error al eliminar el producto");
+          }
+        },
+      },
+      cancel: { label: "Cancelar" },
+    });
   };
 
   return (

@@ -24,7 +24,7 @@
   text-align: left;
 }
 
-input {
+.login-card input {
   width: 100%;
   padding: 12px;
   margin-top: 5px;
@@ -33,7 +33,7 @@ input {
   font-size: 16px;
 }
 
-button {
+.login-card button {
   width: 100%;
   padding: 12px;
   background-color: #333;

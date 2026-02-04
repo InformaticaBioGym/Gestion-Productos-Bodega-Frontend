@@ -10,6 +10,7 @@ import {
   editarUsuarioRequest,
 } from "../services/user.service.js";
 import "./usuarios.page.css";
+import { toast } from "sonner";
 
 function UsuariosPage() {
   const [usuarios, setUsuarios] = useState([]);
@@ -52,13 +53,16 @@ function UsuariosPage() {
     e.preventDefault();
     try {
       await crearUsuarioRequest(nuevoUsuario);
-      alert("Usuario creado con éxito");
+      toast.success("Usuario creado con éxito");
       cargarUsuarios();
       cerrarModal();
     } catch (error) {
       console.error(error);
-      const errorMsg = error.response?.data?.detalle || error.response?.data?.mensaje || "Error interno";
-      alert("Error al crear usuario: " + errorMsg);
+      const errorMsg =
+        error.response?.data?.detalle ||
+        error.response?.data?.mensaje ||
+        "Error interno";
+      toast.error("Error al crear usuario: " + errorMsg);
     }
   };
 
@@ -70,30 +74,37 @@ function UsuariosPage() {
         delete datosActualizados.contraseña;
       }
       await editarUsuarioRequest(usuarioSeleccionado.id, datosActualizados);
-      alert("Usuario actualizado correctamente");
+      toast.success("Usuario actualizado correctamente");
       cargarUsuarios();
       cerrarModal();
     } catch (error) {
       console.error(error);
-      const errorMsg = error.response?.data?.detalle || error.response?.data?.mensaje || "Error interno";
-      alert("Error al actualizar: " + errorMsg);
+      const errorMsg =
+        error.response?.data?.detalle ||
+        error.response?.data?.mensaje ||
+        "Error interno";
+      toast.error("Error al actualizar: " + errorMsg);
     }
   };
 
   const handleEliminar = async () => {
-    if (
-      window.confirm("¿Estás seguro de que quieres eliminar a este usuario?")
-    ) {
-      try {
-        await eliminarUsuarioRequest(usuarioSeleccionado.id);
-        alert("Usuario eliminado");
-        cargarUsuarios();
-        cerrarModal();
-      } catch (error) {
-        console.error(error);
-        alert("No se pudo eliminar al usuario");
-      }
-    }
+    toast("¿Estás seguro de que quieres eliminar a este usuario?", {
+      action: {
+        label: "Eliminar",
+        onClick: async () => {
+          try {
+            await eliminarUsuarioRequest(usuarioSeleccionado.id);
+            toast.success("Usuario eliminado");
+            cargarUsuarios();
+            cerrarModal();
+          } catch (error) {
+            console.error(error);
+            toast.error("No se pudo eliminar al usuario");
+          }
+        },
+      },
+      cancel: { label: "Cancelar" },
+    });
   };
 
   const abrirModalAgregar = () => {

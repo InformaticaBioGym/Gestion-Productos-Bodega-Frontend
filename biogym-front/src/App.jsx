@@ -8,10 +8,12 @@ import UbicacionesPage from "./pages/ubicacion.page.jsx";
 import BodegasPage from "./pages/bodega.page.jsx";
 import ProtectedRoute from "./components/protected.route.jsx";
 import AdminRoute from "./components/admin.route.jsx";
+import { Toaster } from "sonner";
 
 function App() {
   return (
     <AuthProvider>
+      <Toaster richColors position="top-center" closeButton />
       <BrowserRouter>
         <Routes>
           <Route path="/login" element={<LoginPage />} />

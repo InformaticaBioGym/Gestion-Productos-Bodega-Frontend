@@ -11,6 +11,7 @@ import {
   eliminarBodegaRequest,
 } from "../services/bodega.service";
 import "./bodega.page.css";
+import { toast } from "sonner";
 
 function BodegasPage() {
   const { user } = useAuth();
@@ -91,29 +92,39 @@ function BodegasPage() {
     try {
       if (modalTipo === "add") {
         await crearBodegaRequest(form);
-        alert("Bodega creada");
+        toast.success("Bodega creada con éxito");
       } else {
         await editarBodegaRequest(bodegaSel.id, form);
-        alert("Bodega actualizada");
+        toast.success("Bodega actualizada con éxito");
       }
       cargarBodegas();
       setModalOpen(false);
     } catch (error) {
-      const msg = error.response?.data?.detalle || error.response?.data?.mensaje || "Error interno";
-      alert("Error: " + msg);
+      const msg =
+        error.response?.data?.detalle ||
+        error.response?.data?.mensaje ||
+        "Error interno";
+      toast.error("Error: " + msg);
     }
   };
 
   const handleEliminar = async () => {
-    if (!window.confirm("¿Eliminar esta bodega?")) return;
-    try {
-      await eliminarBodegaRequest(bodegaSel.id);
-      alert("Bodega eliminada");
-      cargarBodegas();
-      setModalOpen(false);
-    } catch (error) {
-      alert("Error al eliminar (¿Tiene productos asignados?)");
-    }
+    toast("¿Estás seguro de eliminar esta bodega?", {
+      action: {
+        label: "Eliminar",
+        onClick: async () => {
+          try {
+            await eliminarBodegaRequest(bodegaSel.id);
+            toast.success("Bodega eliminada");
+            cargarBodegas();
+            setModalOpen(false);
+          } catch (error) {
+            toast.error("No se pudo eliminar (¿Tiene productos asignados?)");
+          }
+        },
+      },
+      cancel: { label: "Cancelar" },
+    });
   };
 
   return (
