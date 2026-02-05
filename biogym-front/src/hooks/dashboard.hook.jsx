@@ -47,7 +47,7 @@ export function useDashboard() {
     {
       title: "Mi Perfil",
       icon: "👤",
-      action: () => console.log("Ir a perfil"),
+      tipo: "perfil",
     },
   ];
 
@@ -55,5 +55,6 @@ export function useDashboard() {
 
   return {
     menuItems,
+    user,
   };
 }

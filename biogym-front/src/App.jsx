@@ -6,6 +6,7 @@ import UsuariosPage from "./pages/usuarios.page.jsx";
 import ProductosPage from "./pages/producto.page.jsx";
 import UbicacionesPage from "./pages/ubicacion.page.jsx";
 import BodegasPage from "./pages/bodega.page.jsx";
+import NotFoundPage from "./pages/not-found.page";
 import ProtectedRoute from "./components/protected.route.jsx";
 import AdminRoute from "./components/admin.route.jsx";
 import { Toaster } from "sonner";
@@ -28,6 +29,7 @@ function App() {
             </Route>
           </Route>
           <Route path="*" element={<LoginPage />} />
+          <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </BrowserRouter>
     </AuthProvider>
