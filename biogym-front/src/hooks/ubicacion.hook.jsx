@@ -9,7 +9,7 @@ import {
 import { obtenerProductosRequest } from "../services/producto.service";
 import { obtenerBodegasRequest } from "../services/bodega.service";
 
-const API_URL = import.meta.env.VITE_API_BACKEND_URL;
+const API_URL = import.meta.env.VITE_API_URL;
 
 export function useUbicaciones() {
   const [ubicaciones, setUbicaciones] = useState([]);
