@@ -1,25 +1,8 @@
-import { useForm } from "react-hook-form";
-import { useAuth } from "../context/auth.context.jsx";
-import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLogin } from "../hooks/login.hook";
 import "./login.page.css";
 
 function LoginPage() {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm();
-  const { signin, isAuthenticated, errors: loginErrors } = useAuth();
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    if (isAuthenticated) navigate("/dashboard");
-  }, [isAuthenticated]);
-
-  const onSubmit = handleSubmit(async (values) => {
-    signin(values);
-  });
+  const { register, onSubmit, errors, loginErrors } = useLogin();
 
   return (
     <div className="login-container">
