@@ -1,59 +1,29 @@
-import { useState, useEffect } from "react";
 import Header from "../components/header";
 import Footer from "../components/footer";
 import Modal from "../components/modal";
 import Table from "../components/table";
-import { useAuth } from "../context/auth.context";
-import {
-  obtenerBodegasRequest,
-  crearBodegaRequest,
-  editarBodegaRequest,
-  eliminarBodegaRequest,
-} from "../services/bodega.service";
+import { useBodegas } from "../hooks/bodega.hook";
 import "./bodega.page.css";
-import { toast } from "sonner";
 
 function BodegasPage() {
-  const { user } = useAuth();
-  const esAdmin = user.rol === "administrador";
-
-  const [bodegas, setBodegas] = useState([]);
-  const [busqueda, setBusqueda] = useState("");
-  const [cargando, setCargando] = useState(false);
-
-  const [modalOpen, setModalOpen] = useState(false);
-  const [modalTipo, setModalTipo] = useState(null);
-  const [bodegaSel, setBodegaSel] = useState(null);
-
-  const [form, setForm] = useState({
-    nombre: "",
-    ubicacion_fisica: "",
-    n_estantes: "",
-  });
-
-  const cargarBodegas = async () => {
-    try {
-      setCargando(true);
-      const res = await obtenerBodegasRequest();
-      setBodegas(res.data);
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setCargando(false);
-    }
-  };
-
-  useEffect(() => {
-    cargarBodegas();
-  }, []);
-
-  const bodegasFiltradas = bodegas.filter((b) => {
-    const termino = busqueda.toLowerCase();
-    return (
-      b.nombre.toLowerCase().includes(termino) ||
-      b.ubicacion_fisica.toLowerCase().includes(termino)
-    );
-  });
+  const {
+    bodegasFiltradas,
+    cargando,
+    busqueda,
+    setBusqueda,
+    esAdmin,
+    modalOpen,
+    modalTipo,
+    bodegaSel,
+    form,
+    handleInputChange,
+    handleGuardar,
+    handleEliminar,
+    abrirModalAdd,
+    abrirModalVer,
+    cerrarModal,
+    irAEditar
+  } = useBodegas();
 
   const dibujarFila = (b) => (
     <div key={b.id} className="list-row">
@@ -70,62 +40,6 @@ function BodegasPage() {
       </button>
     </div>
   );
-
-  const handleInputChange = (e) =>
-    setForm({ ...form, [e.target.name]: e.target.value });
-
-  const abrirModalAdd = () => {
-    setForm({ nombre: "", ubicacion_fisica: "", n_estantes: "" });
-    setModalTipo("add");
-    setModalOpen(true);
-  };
-
-  const abrirModalVer = (bodega) => {
-    setBodegaSel(bodega);
-    setForm(bodega);
-    setModalTipo("view");
-    setModalOpen(true);
-  };
-
-  const handleGuardar = async (e) => {
-    e.preventDefault();
-    try {
-      if (modalTipo === "add") {
-        await crearBodegaRequest(form);
-        toast.success("Bodega creada con éxito");
-      } else {
-        await editarBodegaRequest(bodegaSel.id, form);
-        toast.success("Bodega actualizada con éxito");
-      }
-      cargarBodegas();
-      setModalOpen(false);
-    } catch (error) {
-      const msg =
-        error.response?.data?.detalle ||
-        error.response?.data?.mensaje ||
-        "Error interno";
-      toast.error("Error: " + msg);
-    }
-  };
-
-  const handleEliminar = async () => {
-    toast("¿Estás seguro de eliminar esta bodega?", {
-      action: {
-        label: "Eliminar",
-        onClick: async () => {
-          try {
-            await eliminarBodegaRequest(bodegaSel.id);
-            toast.success("Bodega eliminada");
-            cargarBodegas();
-            setModalOpen(false);
-          } catch (error) {
-            toast.error("No se pudo eliminar (¿Tiene productos asignados?)");
-          }
-        },
-      },
-      cancel: { label: "Cancelar" },
-    });
-  };
 
   return (
     <div className="page-container">
@@ -158,7 +72,7 @@ function BodegasPage() {
       {/* === MODAL === */}
       <Modal
         isOpen={modalOpen}
-        onClose={() => setModalOpen(false)}
+        onClose={cerrarModal}
         title={
           modalTipo === "add"
             ? "Nueva Bodega"
@@ -177,7 +91,6 @@ function BodegasPage() {
               required
               placeholder="Ej: Bodega Central"
             />
-
             <label>Ubicación Física</label>
             <input
               name="ubicacion_fisica"
@@ -186,7 +99,6 @@ function BodegasPage() {
               required
               placeholder="Ej: Av. Principal 123"
             />
-
             <label>Cantidad de Estantes</label>
             <input
               type="number"
@@ -196,16 +108,9 @@ function BodegasPage() {
               required
               placeholder="1, 2, 3..."
             />
-
             <div className="modal-actions">
-              <button type="submit" className="btn-accept">
-                Guardar
-              </button>
-              <button
-                type="button"
-                className="btn-cancel"
-                onClick={() => setModalOpen(false)}
-              >
+              <button type="submit" className="btn-accept">Guardar</button>
+              <button type="button" className="btn-cancel" onClick={cerrarModal}>
                 Cancelar
               </button>
             </div>
@@ -215,45 +120,25 @@ function BodegasPage() {
         {modalTipo === "view" && bodegaSel && (
           <>
             <div className="user-detail-info">
-              <p>
-                <strong>Nombre:</strong> {bodegaSel.nombre}
-              </p>
-              <p>
-                <strong>Dirección:</strong> {bodegaSel.ubicacion_fisica}
-              </p>
-              <p>
-                <strong>Capacidad:</strong> {bodegaSel.n_estantes} estantes
-              </p>
+              <p><strong>Nombre:</strong> {bodegaSel.nombre}</p>
+              <p><strong>Dirección:</strong> {bodegaSel.ubicacion_fisica}</p>
+              <p><strong>Capacidad:</strong> {bodegaSel.n_estantes} estantes</p>
             </div>
 
             <div className="modal-actions">
-              {/* botones admin */}
               {esAdmin && (
                 <>
-                  <button
-                    className="btn-edit"
-                    onClick={() => setModalTipo("edit")}
-                  >
-                    Editar
-                  </button>
-                  <button className="btn-delete" onClick={handleEliminar}>
-                    Eliminar
-                  </button>
+                  <button className="btn-edit" onClick={irAEditar}>Editar</button>
+                  <button className="btn-delete" onClick={handleEliminar}>Eliminar</button>
                 </>
               )}
               {!esAdmin && (
-                <button
-                  className="btn-cancel"
-                  onClick={() => setModalOpen(false)}
-                >
-                  Cerrar
-                </button>
+                <button className="btn-cancel" onClick={cerrarModal}>Cerrar</button>
               )}
             </div>
           </>
         )}
       </Modal>
-
       <Footer />
     </div>
   );
