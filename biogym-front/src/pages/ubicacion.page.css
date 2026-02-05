@@ -134,10 +134,16 @@
   font-size: 1rem;
 }
 
-/* --- AUTOCOMPLETE --- */
+/* --- AUTOCOMPLETAR --- */
 .autocomplete-container {
   position: relative;
+  width: 100%;
 }
+
+.autocomplete-container input {
+  width: 100%;
+}
+
 .suggestions-list {
   position: absolute;
   top: 100%;
@@ -178,7 +184,7 @@
   padding: 0 5px;
 }
 
-/* Imagenes en Modales */
+/* Imagenes */
 .image-preview {
   width: 100%;
   height: 150px;
@@ -198,7 +204,7 @@
   cursor: zoom-in;
 }
 
-/* Info Detalle */
+/* Detalle */
 .user-detail-info {
   background-color: #f9f9f9;
   padding: 15px;
@@ -257,7 +263,7 @@
   cursor: pointer;
 }
 
-/* --- MODAL DE IMAGEN --- */
+/* --- IMAGEN --- */
 .lightbox-image {
   width: 100%;
   height: auto;

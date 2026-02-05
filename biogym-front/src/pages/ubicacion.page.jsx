@@ -1,117 +1,45 @@
-import { useState, useEffect } from "react";
 import Header from "../components/header";
 import Footer from "../components/footer";
 import Modal from "../components/modal";
 import Table from "../components/table";
-import {
-  obtenerUbicacionesRequest,
-  crearUbicacionRequest,
-  editarUbicacionRequest,
-  eliminarUbicacionRequest,
-} from "../services/ubicacion.service";
-import { obtenerProductosRequest } from "../services/producto.service";
-import { obtenerBodegasRequest } from "../services/bodega.service";
+import { useUbicaciones } from "../hooks/ubicacion.hook"; 
 import "./ubicacion.page.css";
-import { toast } from "sonner";
-
-const API_URL = import.meta.env.VITE_API_BACKEND_URL;
 
 function UbicacionesPage() {
-  const [ubicaciones, setUbicaciones] = useState([]);
-  const [listaProductos, setListaProductos] = useState([]);
-  const [listaBodegas, setListaBodegas] = useState([]);
+  const {
+    ubicaciones,
+    listaBodegas,
+    productosSugeridos,
+    busqueda,
+    cargando,
+    enviando,
+    modalOpen,
+    modalTipo,
+    ubicacionSel,
+    imgModalUrl,
+    form,
+    previewUrl,
+    prodSearchTerm,
+    showSuggestions,
+    selectedProdName,
+    setBusqueda,
+    setImgModalUrl,
+    setProdSearchTerm,
+    setShowSuggestions,
+    cargarDatos,
+    obtenerUrlImagen,
+    seleccionarProducto,
+    quitarProducto,
+    handleInputChange,
+    handleFileChange,
+    handleGuardar,
+    handleEliminar,
+    abrirModalAdd,
+    abrirModalVer,
+    irAEditar,
+    cerrarModal
+  } = useUbicaciones();
 
-  const [busqueda, setBusqueda] = useState("");
-  const [cargando, setCargando] = useState(false);
-  const [enviando, setEnviando] = useState(false);
-
-  // Modal
-  const [modalOpen, setModalOpen] = useState(false);
-  const [modalTipo, setModalTipo] = useState(null);
-  const [ubicacionSel, setUbicacionSel] = useState(null);
-
-  // Formulario
-  const [form, setForm] = useState({
-    producto_id: "",
-    bodega_id: "",
-    estante: "",
-    descripcion: "",
-    foto: null,
-  });
-
-  const [previewUrl, setPreviewUrl] = useState(null);
-
-  const [prodSearchTerm, setProdSearchTerm] = useState("");
-  const [showSuggestions, setShowSuggestions] = useState(false);
-  const [selectedProdName, setSelectedProdName] = useState(null);
-
-  const [imgModalUrl, setImgModalUrl] = useState(null);
-
-  const cargarDatos = async (termino = "") => {
-    try {
-      setCargando(true);
-      try {
-        const resUbi = await obtenerUbicacionesRequest(termino);
-        setUbicaciones(Array.isArray(resUbi.data) ? resUbi.data : []);
-      } catch (e) {
-        if (e.response?.status === 404) {
-          setUbicaciones([]);
-        } else {
-          console.error("Error al cargar ubicaciones:", e);
-        }
-      }
-      try {
-        const resProd = await obtenerProductosRequest();
-        setListaProductos(Array.isArray(resProd.data) ? resProd.data : []);
-      } catch (e) {
-        console.error("Error al cargar productos:", e);
-      }
-      try {
-        const resBod = await obtenerBodegasRequest();
-        setListaBodegas(Array.isArray(resBod.data) ? resBod.data : []);
-      } catch (e) {
-        console.error("Error al cargar bodegas:", e);
-      }
-    } catch (error) {
-      console.error("Error general:", error);
-      toast.error("Error al cargar los datos. Intenta recargar la página.");
-    } finally {
-      setCargando(false);
-    }
-  };
-  useEffect(() => {
-    cargarDatos();
-  }, []);
-
-  // --- PROCESAR URL DE IMAGEN (CLOUDINARY) ---
-  const obtenerUrlImagen = (img) => {
-    if (!img) return "https://via.placeholder.com/50?text=Sin+Foto";
-    return img.startsWith("http") ? img : `${API_URL}/${img}`;
-  };
-
-  const productosSugeridos = listaProductos
-    .filter((p) => {
-      const term = prodSearchTerm.toLowerCase();
-      return (
-        p.nombre.toLowerCase().includes(term) ||
-        p.sku.toLowerCase().includes(term)
-      );
-    })
-    .slice(0, 10);
-
-  const seleccionarProducto = (prod) => {
-    setForm({ ...form, producto_id: prod.id });
-    setSelectedProdName(`${prod.nombre} (SKU: ${prod.sku})`);
-    setProdSearchTerm("");
-    setShowSuggestions(false);
-  };
-
-  const quitarProducto = () => {
-    setForm({ ...form, producto_id: "" });
-    setSelectedProdName(null);
-  };
-
-  // --- DIBUJAR FILA ---
   const dibujarFila = (u) => {
     const fullImgUrl = obtenerUrlImagen(u.foto);
     return (
@@ -149,119 +77,11 @@ function UbicacionesPage() {
     );
   };
 
-  const handleFileChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      setForm({ ...form, foto: file });
-      setPreviewUrl(URL.createObjectURL(file));
-    }
-  };
-
-  const handleInputChange = (e) =>
-    setForm({ ...form, [e.target.name]: e.target.value });
-
-  const abrirModalAdd = () => {
-    setForm({
-      producto_id: "",
-      bodega_id: "",
-      estante: "",
-      descripcion: "",
-      foto: null,
-    });
-    setPreviewUrl(null);
-    setProdSearchTerm("");
-    setSelectedProdName(null);
-    setShowSuggestions(false);
-    setModalTipo("add");
-    setModalOpen(true);
-  };
-
-  const abrirModalVer = (u) => {
-    setUbicacionSel(u);
-    const url = obtenerUrlImagen(u.foto);
-    setForm({
-      ...u,
-      producto_id: u.producto?.id,
-      bodega_id: u.bodega?.id,
-      foto: null,
-    });
-    setPreviewUrl(url);
-    setSelectedProdName(
-      u.producto ? `${u.producto.nombre} (SKU: ${u.producto.sku})` : null,
-    );
-
-    setModalTipo("view");
-    setModalOpen(true);
-  };
-
-  const handleGuardar = async (e) => {
-    e.preventDefault();
-    if (!form.producto_id) {
-      toast.warning("Debes seleccionar un producto de la lista");
-      return;
-    }
-
-    if (enviando) return;
-
-    try {
-      setEnviando(true);
-      const formData = new FormData();
-      formData.append("producto_id", form.producto_id);
-      formData.append("bodega_id", form.bodega_id);
-      formData.append("descripcion", form.descripcion);
-
-      if (form.estante) {
-        formData.append("estante", form.estante);
-      }
-      if (form.foto instanceof File) {
-        formData.append("foto", form.foto);
-      }
-
-      if (modalTipo === "add") {
-        await crearUbicacionRequest(formData);
-        toast.success("¡Ubicación registrada correctamente!");
-      } else {
-        await editarUbicacionRequest(ubicacionSel.id, formData);
-        toast.success("Ubicación actualizada con éxito");
-      }
-      setModalOpen(false);
-      cargarDatos();
-    } catch (error) {
-      const msg =
-        error.response?.data?.detalle ||
-        error.response?.data?.mensaje ||
-        "Error interno";
-      toast.error("No se pudo guardar: " + msg);
-    } finally {
-      setEnviando(false);
-    }
-  };
-
-  const handleEliminar = async () => {
-    toast("¿Estás seguro de eliminar esta ubicación?", {
-      action: {
-        label: "Eliminar",
-        onClick: async () => {
-          try {
-            await eliminarUbicacionRequest(ubicacionSel.id);
-            toast.success("Ubicación eliminada correctamente");
-            cargarDatos();
-            setModalOpen(false);
-          } catch (e) {
-            toast.error("Error al eliminar la ubicación");
-          }
-        },
-      },
-      cancel: {
-        label: "Cancelar",
-      },
-    });
-  };
-
   return (
     <div className="page-container">
       <Header />
       <div className="content-scroll">
+        {/* BUSCADOR */}
         <div className="search-bar-container">
           <span
             className="search-icon"
@@ -278,6 +98,7 @@ function UbicacionesPage() {
             onKeyDown={(e) => e.key === "Enter" && cargarDatos(busqueda)}
           />
         </div>
+        
         <div className="section-title">
           <h2>Mapa de Ubicaciones</h2>
         </div>
@@ -291,28 +112,27 @@ function UbicacionesPage() {
         />
       </div>
 
-      {/* === MODAL === */}
+      {/* === MODAL(añadir/editar/ver) === */}
       <Modal
         isOpen={modalOpen}
-        onClose={() => setModalOpen(false)}
+        onClose={cerrarModal}
         title={
           modalTipo === "add"
             ? "Nueva Ubicación"
             : modalTipo === "edit"
               ? "Editar"
-              : "Descripcion"
+              : "Detalle Ubicación"
         }
       >
         {(modalTipo === "add" || modalTipo === "edit") && (
           <form className="modal-form" onSubmit={handleGuardar}>
-            {/* --- BUSCADOR DE PRODUCTOS --- */}
+            
+            {/* --- AUTOCOMPLETADO DE PRODUCTOS --- */}
             <label>Producto</label>
             {selectedProdName ? (
               <div className="selected-product-badge">
                 <span>{selectedProdName}</span>
-                <span className="remove-product" onClick={quitarProducto}>
-                  ✕
-                </span>
+                <span className="remove-product" onClick={quitarProducto}>✕</span>
               </div>
             ) : (
               <div className="autocomplete-container">
@@ -325,27 +145,17 @@ function UbicacionesPage() {
                     setShowSuggestions(true);
                   }}
                   onFocus={() => setShowSuggestions(true)}
-                  style={{
-                    border: !form.producto_id
-                      ? "1px solid #d32f2f"
-                      : "1px solid #ddd",
-                  }}
+                  style={{ border: !form.producto_id ? "1px solid #d32f2f" : "1px solid #ddd" }}
                 />
                 {showSuggestions && prodSearchTerm && (
                   <div className="suggestions-list">
                     {productosSugeridos.map((p) => (
-                      <div
-                        key={p.id}
-                        className="suggestion-item"
-                        onClick={() => seleccionarProducto(p)}
-                      >
+                      <div key={p.id} className="suggestion-item" onClick={() => seleccionarProducto(p)}>
                         {p.nombre} <strong>(SKU: {p.sku})</strong>
                       </div>
                     ))}
                     {productosSugeridos.length === 0 && (
-                      <div style={{ padding: 10, color: "#999" }}>
-                        No se encontraron productos.
-                      </div>
+                      <div style={{ padding: 10, color: "#999" }}>No se encontraron productos.</div>
                     )}
                   </div>
                 )}
@@ -353,17 +163,10 @@ function UbicacionesPage() {
             )}
 
             <label>Bodega</label>
-            <select
-              name="bodega_id"
-              value={form.bodega_id}
-              onChange={handleInputChange}
-              required
-            >
+            <select name="bodega_id" value={form.bodega_id} onChange={handleInputChange} required>
               <option value="">-- Selecciona Bodega --</option>
               {listaBodegas.map((b) => (
-                <option key={b.id} value={b.id}>
-                  {b.nombre}
-                </option>
+                <option key={b.id} value={b.id}>{b.nombre}</option>
               ))}
             </select>
 
@@ -373,7 +176,7 @@ function UbicacionesPage() {
               name="estante"
               value={form.estante}
               onChange={handleInputChange}
-              placeholder="1, 2, 3... si no dejar vacío (opcional)"
+              placeholder="Opcional"
             />
 
             <label>Referencia/Descripción</label>
@@ -381,7 +184,7 @@ function UbicacionesPage() {
               name="descripcion"
               value={form.descripcion}
               onChange={handleInputChange}
-              placeholder="Ej: Frente al estante 3 (opcional)"
+              placeholder="Ej: Frente al estante 3"
             />
 
             <label>Foto del lugar</label>
@@ -395,33 +198,11 @@ function UbicacionesPage() {
                 type="submit"
                 className="btn-accept"
                 disabled={enviando}
-                style={{
-                  opacity: enviando ? 0.7 : 1,
-                  cursor: enviando ? "not-allowed" : "pointer",
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  gap: "10px",
-                }}
+                style={{ opacity: enviando ? 0.7 : 1, cursor: enviando ? "not-allowed" : "pointer" }}
               >
-                {enviando ? (
-                  <>
-                    <span style={{ animation: "spin 1s linear infinite" }}>
-                      ⏳
-                    </span>
-                    Guardando...
-                  </>
-                ) : (
-                  "Guardar"
-                )}
+                {enviando ? "Guardando..." : "Guardar"}
               </button>
-              <button
-                type="button"
-                className="btn-cancel"
-                onClick={() => setModalOpen(false)}
-              >
-                Cancelar
-              </button>
+              <button type="button" className="btn-cancel" onClick={cerrarModal}>Cancelar</button>
             </div>
           </form>
         )}
@@ -436,46 +217,27 @@ function UbicacionesPage() {
               onClick={() => setImgModalUrl(previewUrl)}
             />
             <div className="user-detail-info">
-              <p>
-                <strong>Producto:</strong> {ubicacionSel.producto?.nombre}
-              </p>
-              <p>
-                <strong>SKU:</strong> {ubicacionSel.producto?.sku}
-              </p>{" "}
-              {/* AGREGADO SKU */}
+              <p><strong>Producto:</strong> {ubicacionSel.producto?.nombre}</p>
+              <p><strong>SKU:</strong> {ubicacionSel.producto?.sku}</p>
               <p>
                 <strong>Ubicación:</strong> {ubicacionSel.bodega?.nombre}
                 {ubicacionSel.estante && ` - Estante ${ubicacionSel.estante}`}
               </p>
               <p>
                 <strong>Descripción:</strong>{" "}
-                {ubicacionSel.descripcion ? (
-                  ubicacionSel.descripcion
-                ) : (
-                  <span style={{ color: "#999", fontStyle: "italic" }}>
-                    No especificada
-                  </span>
-                )}
+                {ubicacionSel.descripcion || <span style={{ color: "#999", fontStyle: "italic" }}>No especificada</span>}
               </p>
             </div>
             <div className="modal-actions">
-              <button className="btn-edit" onClick={() => setModalTipo("edit")}>
-                Editar
-              </button>
-              <button className="btn-delete" onClick={handleEliminar}>
-                Eliminar
-              </button>
+              <button className="btn-edit" onClick={irAEditar}>Editar</button>
+              <button className="btn-delete" onClick={handleEliminar}>Eliminar</button>
             </div>
           </>
         )}
       </Modal>
 
-      {/* === EXPANDIR IMAGEN === */}
-      <Modal
-        isOpen={!!imgModalUrl}
-        onClose={() => setImgModalUrl(null)}
-        title="Vista Previa"
-      >
+      {/* === ZOOM IMAGEN === */}
+      <Modal isOpen={!!imgModalUrl} onClose={() => setImgModalUrl(null)} title="Vista Previa">
         {imgModalUrl && (
           <img src={imgModalUrl} alt="Expandida" className="lightbox-image" />
         )}
@@ -485,4 +247,5 @@ function UbicacionesPage() {
     </div>
   );
 }
+
 export default UbicacionesPage;

@@ -49,7 +49,7 @@ export function useProductos() {
   const handleInputChange = (e) => {
     setFormProd({ ...formProd, [e.target.name]: e.target.value });
   };
-
+  //---crud---
   const handleGuardar = async (e) => {
     e.preventDefault();
     try {
