@@ -6,7 +6,7 @@ Sistema de gestión de inventario para la tienda de suplementos BioGym. Permite 
 - **Frontend:** React + Vite
 - **Estilos:** CSS Modules + Layout Global
 - **Backend:** Node.js + Express
-- **Base de Datos:** MongoDB
+- **Base de Datos:** PostgreSQL
 - **Seguridad:** JWT, Helmet, Rate Limiting
 
 ## 🛠️ Instalación
