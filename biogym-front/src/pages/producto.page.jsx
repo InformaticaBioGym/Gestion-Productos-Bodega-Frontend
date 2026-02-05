@@ -2,8 +2,8 @@ import Header from "../components/header";
 import Footer from "../components/footer";
 import Modal from "../components/modal";
 import Table from "../components/table";
+import SearchBar from "../components/search-bar";
 import { useProductos } from "../hooks/producto.hook";
-import "./producto.page.css";
 
 function ProductosPage() {
   const {
@@ -45,23 +45,12 @@ function ProductosPage() {
       <Header />
       <div className="content-scroll">
         {/* BUSCADOR */}
-        <div className="search-bar-container">
-          <span
-            className="search-icon"
-            onClick={() => cargarProductos(busqueda)}
-            style={{ cursor: "pointer" }}
-          >
-            🔍
-          </span>
-          <input
-            type="text"
-            placeholder="Buscar por SKU o Nombre (Enter)..."
-            className="search-input"
-            value={busqueda}
-            onChange={(e) => setBusqueda(e.target.value)}
-            onKeyDown={(e) => e.key === "Enter" && cargarProductos(busqueda)}
-          />
-        </div>
+        <SearchBar 
+          placeholder="Buscar por SKU o Nombre..." 
+          value={busqueda} 
+          onChange={(e) => setBusqueda(e.target.value)}
+          onSearch={cargarProductos} // 👈 ¡Aquí está la magia!
+        />
 
         <div className="section-title">
           <h2>Inventario</h2>

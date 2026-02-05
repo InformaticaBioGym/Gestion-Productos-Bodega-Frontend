@@ -3,7 +3,6 @@ import Footer from "../components/footer";
 import Modal from "../components/modal";
 import Table from "../components/table";
 import { useBodegas } from "../hooks/bodega.hook";
-import "./bodega.page.css";
 
 function BodegasPage() {
   const {

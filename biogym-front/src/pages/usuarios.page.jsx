@@ -2,8 +2,8 @@ import Header from "../components/header";
 import Footer from "../components/footer";
 import Modal from "../components/modal";
 import Table from "../components/table";
+import SearchBar from "../components/search-bar";
 import { useUsuarios } from "../hooks/usuarios.hook"; 
-import "./usuarios.page.css";
 
 function UsuariosPage() {
   const {
@@ -47,15 +47,11 @@ function UsuariosPage() {
     <div className="page-container">
       <Header />
       <div className="content-scroll">
-        <div className="search-bar-container">
-          <span className="search-icon">🔍</span>
-          <input
-            className="search-input"
-            placeholder="Buscar usuario..."
-            value={busqueda}
-            onChange={(e) => setBusqueda(e.target.value)}
-          />
-        </div>
+        <SearchBar 
+          placeholder="Buscar usuario..." 
+          value={busqueda} 
+          onChange={(e) => setBusqueda(e.target.value)} 
+        />
         <div className="section-title">
           <h2>Gestión de Personal</h2>
         </div>
