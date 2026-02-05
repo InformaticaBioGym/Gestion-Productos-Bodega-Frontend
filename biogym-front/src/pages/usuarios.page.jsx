@@ -1,144 +1,32 @@
-import { useState, useEffect } from "react";
 import Header from "../components/header";
 import Footer from "../components/footer";
 import Modal from "../components/modal";
 import Table from "../components/table";
-import {
-  obtenerUsuariosRequest,
-  crearUsuarioRequest,
-  eliminarUsuarioRequest,
-  editarUsuarioRequest,
-} from "../services/user.service.js";
+import { useUsuarios } from "../hooks/usuarios.hook"; 
 import "./usuarios.page.css";
-import { toast } from "sonner";
 
 function UsuariosPage() {
-  const [usuarios, setUsuarios] = useState([]);
-  const [busqueda, setBusqueda] = useState("");
-  const [cargando, setCargando] = useState(false);
+  const {
+    usuariosFiltrados,
+    cargando,
+    busqueda,
+    setBusqueda,
+    modalOpen,
+    modalTipo,
+    usuarioSeleccionado,
+    nuevoUsuario,
+    handleInputChange,
+    handleNombreChange,
+    handleCrearUsuario,
+    handleEditarUsuario,
+    handleEliminar,
+    abrirModalAgregar,
+    abrirModalVer,
+    irAEditar,
+    cerrarModal
+  } = useUsuarios();
 
-  const [modalOpen, setModalOpen] = useState(false);
-  const [modalTipo, setModalTipo] = useState(null);
-  const [usuarioSeleccionado, setUsuarioSeleccionado] = useState(null);
-
-  const [nuevoUsuario, setNuevoUsuario] = useState({
-    nombre: "",
-    correo: "",
-    contraseña: "",
-    rol: "trabajador",
-  });
-
-  const cargarUsuarios = async () => {
-    try {
-      setCargando(true);
-      const res = await obtenerUsuariosRequest();
-      setUsuarios(res.data);
-    } catch (error) {
-      console.error("Error cargando usuarios:", error);
-    } finally {
-      setCargando(false);
-    }
-  };
-
-  useEffect(() => {
-    cargarUsuarios();
-  }, []);
-
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setNuevoUsuario({ ...nuevoUsuario, [name]: value });
-  };
-
-  const handleCrearUsuario = async (e) => {
-    e.preventDefault();
-    try {
-      await crearUsuarioRequest(nuevoUsuario);
-      toast.success("Usuario creado con éxito");
-      cargarUsuarios();
-      cerrarModal();
-    } catch (error) {
-      console.error(error);
-      const errorMsg =
-        error.response?.data?.detalle ||
-        error.response?.data?.mensaje ||
-        "Error interno";
-      toast.error("Error al crear usuario: " + errorMsg);
-    }
-  };
-
-  const handleEditarUsuario = async (e) => {
-    e.preventDefault();
-    try {
-      const datosActualizados = { ...nuevoUsuario };
-      if (!datosActualizados.contraseña) {
-        delete datosActualizados.contraseña;
-      }
-      await editarUsuarioRequest(usuarioSeleccionado.id, datosActualizados);
-      toast.success("Usuario actualizado correctamente");
-      cargarUsuarios();
-      cerrarModal();
-    } catch (error) {
-      console.error(error);
-      const errorMsg =
-        error.response?.data?.detalle ||
-        error.response?.data?.mensaje ||
-        "Error interno";
-      toast.error("Error al actualizar: " + errorMsg);
-    }
-  };
-
-  const handleEliminar = async () => {
-    toast("¿Estás seguro de que quieres eliminar a este usuario?", {
-      action: {
-        label: "Eliminar",
-        onClick: async () => {
-          try {
-            await eliminarUsuarioRequest(usuarioSeleccionado.id);
-            toast.success("Usuario eliminado");
-            cargarUsuarios();
-            cerrarModal();
-          } catch (error) {
-            console.error(error);
-            toast.error("No se pudo eliminar al usuario");
-          }
-        },
-      },
-      cancel: { label: "Cancelar" },
-    });
-  };
-
-  const abrirModalAgregar = () => {
-    setUsuarioSeleccionado(null);
-    setNuevoUsuario({
-      nombre: "",
-      correo: "",
-      contraseña: "",
-      rol: "trabajador",
-    });
-    setModalTipo("add");
-    setModalOpen(true);
-  };
-
-  const abrirModalVer = (usuario) => {
-    setUsuarioSeleccionado(usuario);
-    setModalTipo("view");
-    setModalOpen(true);
-  };
-
-  const irAEditar = () => {
-    setNuevoUsuario({
-      nombre: usuarioSeleccionado.nombre,
-      correo: usuarioSeleccionado.correo,
-      contraseña: "",
-      rol: usuarioSeleccionado.rol,
-    });
-    setModalTipo("edit");
-  };
-
-  const cerrarModal = () => {
-    setModalOpen(false);
-  };
-
+  // Funcion tabla
   const dibujarFilaUsuario = (usuario) => (
     <div key={usuario.id} className="list-row">
       <div className="user-data">
@@ -155,25 +43,10 @@ function UsuariosPage() {
     </div>
   );
 
-  const usuariosFiltrados = usuarios.filter((u) => {
-    const nombre = (u.nombre || "").toLowerCase();
-    const correo = (u.correo || "").toLowerCase();
-    const termino = busqueda.toLowerCase();
-    return nombre.includes(termino) || correo.includes(termino);
-  });
-
-  const handleNombreChange = (e) => {
-    const valor = e.target.value;
-    if (/^[a-zA-ZÀ-ÿ\u00f1\u00d1\s]*$/.test(valor)) {
-      setNuevoUsuario({ ...nuevoUsuario, nombre: valor });
-    }
-  };
-
   return (
     <div className="page-container">
       <Header />
       <div className="content-scroll">
-        {/* BUSCADOR */}
         <div className="search-bar-container">
           <span className="search-icon">🔍</span>
           <input
@@ -186,7 +59,7 @@ function UsuariosPage() {
         <div className="section-title">
           <h2>Gestión de Personal</h2>
         </div>
-        {/* TABLA REUTILIZABLE */}
+        
         <Table
           title="Usuarios"
           data={usuariosFiltrados}
@@ -195,15 +68,15 @@ function UsuariosPage() {
           renderRow={dibujarFilaUsuario}
         />
       </div>
-      {/* MODAL REUTILIZABLE */}
+
       <Modal isOpen={modalOpen} onClose={cerrarModal}>
-        {/* TÍTULO */}
         <h3>
           {modalTipo === "add" && "Nuevo Trabajador"}
           {modalTipo === "edit" && "Editar Usuario"}
           {modalTipo === "view" && "Detalle de Usuario"}
         </h3>
-        {/* FORMULARIO agregar */}
+
+        {/* AGREGAR */}
         {modalTipo === "add" && (
           <form className="modal-form" onSubmit={handleCrearUsuario}>
             <label>Nombre Completo</label>
@@ -214,7 +87,6 @@ function UsuariosPage() {
               required
               placeholder="Ej: Nombre Apellido"
             />
-
             <label>Correo Electrónico</label>
             <input
               type="email"
@@ -224,7 +96,6 @@ function UsuariosPage() {
               required
               placeholder="Ej: correo@gmail.com"
             />
-
             <label>Contraseña</label>
             <input
               type="password"
@@ -234,33 +105,19 @@ function UsuariosPage() {
               required
               placeholder="*********"
             />
-
             <label>Rol</label>
-            <select
-              name="rol"
-              value={nuevoUsuario.rol}
-              onChange={handleInputChange}
-            >
+            <select name="rol" value={nuevoUsuario.rol} onChange={handleInputChange}>
               <option value="trabajador">Trabajador</option>
               <option value="administrador">Administrador</option>
             </select>
-
             <div className="modal-actions">
-              <button type="submit" className="btn-accept">
-                Guardar Usuario
-              </button>
-              <button
-                type="button"
-                className="btn-cancel"
-                onClick={cerrarModal}
-              >
-                Cancelar
-              </button>
+              <button type="submit" className="btn-accept">Guardar Usuario</button>
+              <button type="button" className="btn-cancel" onClick={cerrarModal}>Cancelar</button>
             </div>
           </form>
         )}
 
-        {/* FORMULARIO EDITAR */}
+        {/* EDITAR */}
         {modalTipo === "edit" && (
           <form className="modal-form" onSubmit={handleEditarUsuario}>
             <label>Nombre Completo</label>
@@ -270,7 +127,6 @@ function UsuariosPage() {
               onChange={handleNombreChange}
               required
             />
-
             <label>Correo Electrónico</label>
             <input
               type="email"
@@ -279,7 +135,6 @@ function UsuariosPage() {
               onChange={handleInputChange}
               required
             />
-
             <label>Contraseña (Opcional)</label>
             <input
               type="password"
@@ -288,51 +143,29 @@ function UsuariosPage() {
               onChange={handleInputChange}
               placeholder="Dejar vacía para no cambiar"
             />
-
             <label>Rol</label>
-            <select
-              name="rol"
-              value={nuevoUsuario.rol}
-              onChange={handleInputChange}
-            >
+            <select name="rol" value={nuevoUsuario.rol} onChange={handleInputChange}>
               <option value="trabajador">Trabajador</option>
               <option value="administrador">Administrador</option>
             </select>
             <div className="modal-actions">
-              <button type="submit" className="btn-accept">
-                Aceptar
-              </button>
-              <button
-                type="button"
-                className="btn-cancel"
-                onClick={cerrarModal}
-              >
-                Cancelar
-              </button>
+              <button type="submit" className="btn-accept">Aceptar</button>
+              <button type="button" className="btn-cancel" onClick={cerrarModal}>Cancelar</button>
             </div>
           </form>
         )}
-        {/*VER  */}
+
+        {/* Ver */}
         {modalTipo === "view" && usuarioSeleccionado && (
           <>
             <div className="user-detail-info">
-              <p>
-                <strong>Nombre:</strong> {usuarioSeleccionado.nombre}
-              </p>
-              <p>
-                <strong>Correo:</strong> {usuarioSeleccionado.correo}
-              </p>
-              <p>
-                <strong>Rol:</strong> {usuarioSeleccionado.rol}
-              </p>
+              <p><strong>Nombre:</strong> {usuarioSeleccionado.nombre}</p>
+              <p><strong>Correo:</strong> {usuarioSeleccionado.correo}</p>
+              <p><strong>Rol:</strong> {usuarioSeleccionado.rol}</p>
             </div>
             <div className="modal-actions">
-              <button className="btn-edit" onClick={irAEditar}>
-                Editar
-              </button>
-              <button className="btn-delete" onClick={handleEliminar}>
-                Eliminar
-              </button>
+              <button className="btn-edit" onClick={irAEditar}>Editar</button>
+              <button className="btn-delete" onClick={handleEliminar}>Eliminar</button>
             </div>
           </>
         )}
