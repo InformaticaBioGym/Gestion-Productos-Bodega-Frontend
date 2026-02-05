@@ -6,20 +6,20 @@ export function useDashboard() {
   const navigate = useNavigate();
 
   const menuAdmin = [
-    { 
-      title: "Usuarios", 
-      icon: "👥", 
-      action: () => navigate("/usuarios") 
+    {
+      title: "Usuarios",
+      icon: "👥",
+      action: () => navigate("/usuarios"),
     },
     {
       title: "Productos",
       icon: "📦",
       action: () => navigate("/productos"),
     },
-    { 
+    {
       title: "Bodegas",
       icon: "🏭",
-      action: () => navigate("/bodegas") 
+      action: () => navigate("/bodegas"),
     },
     {
       title: "Ubicaciones",
@@ -54,6 +54,6 @@ export function useDashboard() {
   const menuItems = user?.rol === "administrador" ? menuAdmin : menuTrabajador;
 
   return {
-    menuItems
+    menuItems,
   };
 }

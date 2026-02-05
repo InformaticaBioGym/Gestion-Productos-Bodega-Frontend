@@ -53,21 +53,24 @@ export function useUbicaciones() {
         if (e.response?.status === 404) setUbicaciones([]);
         else console.error("Error al cargar ubicaciones:", e);
       }
-      
+
       if (listaProductos.length === 0) {
         try {
           const resProd = await obtenerProductosRequest();
           setListaProductos(Array.isArray(resProd.data) ? resProd.data : []);
-        } catch (e) { console.error("Error productos:", e); }
+        } catch (e) {
+          console.error("Error productos:", e);
+        }
       }
-      
+
       if (listaBodegas.length === 0) {
         try {
           const resBod = await obtenerBodegasRequest();
           setListaBodegas(Array.isArray(resBod.data) ? resBod.data : []);
-        } catch (e) { console.error("Error bodegas:", e); }
+        } catch (e) {
+          console.error("Error bodegas:", e);
+        }
       }
-
     } catch (error) {
       console.error("Error general:", error);
       toast.error("Error al cargar datos");
@@ -147,7 +150,10 @@ export function useUbicaciones() {
       setModalOpen(false);
       cargarDatos(busqueda);
     } catch (error) {
-      const msg = error.response?.data?.detalle || error.response?.data?.mensaje || "Error interno";
+      const msg =
+        error.response?.data?.detalle ||
+        error.response?.data?.mensaje ||
+        "Error interno";
       toast.error("No se pudo guardar: " + msg);
     } finally {
       setEnviando(false);
@@ -199,7 +205,9 @@ export function useUbicaciones() {
       foto: null,
     });
     setPreviewUrl(url);
-    setSelectedProdName(u.producto ? `${u.producto.nombre} (SKU: ${u.producto.sku})` : null);
+    setSelectedProdName(
+      u.producto ? `${u.producto.nombre} (SKU: ${u.producto.sku})` : null,
+    );
     setModalTipo("view");
     setModalOpen(true);
   };
@@ -238,6 +246,6 @@ export function useUbicaciones() {
     abrirModalAdd,
     abrirModalVer,
     irAEditar,
-    cerrarModal
+    cerrarModal,
   };
 }

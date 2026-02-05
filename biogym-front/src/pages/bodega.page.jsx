@@ -21,7 +21,7 @@ function BodegasPage() {
     abrirModalAdd,
     abrirModalVer,
     cerrarModal,
-    irAEditar
+    irAEditar,
   } = useBodegas();
 
   const dibujarFila = (b) => (
@@ -108,8 +108,14 @@ function BodegasPage() {
               placeholder="1, 2, 3..."
             />
             <div className="modal-actions">
-              <button type="submit" className="btn-accept">Guardar</button>
-              <button type="button" className="btn-cancel" onClick={cerrarModal}>
+              <button type="submit" className="btn-accept">
+                Guardar
+              </button>
+              <button
+                type="button"
+                className="btn-cancel"
+                onClick={cerrarModal}
+              >
                 Cancelar
               </button>
             </div>
@@ -119,20 +125,32 @@ function BodegasPage() {
         {modalTipo === "view" && bodegaSel && (
           <>
             <div className="user-detail-info">
-              <p><strong>Nombre:</strong> {bodegaSel.nombre}</p>
-              <p><strong>Dirección:</strong> {bodegaSel.ubicacion_fisica}</p>
-              <p><strong>Capacidad:</strong> {bodegaSel.n_estantes} estantes</p>
+              <p>
+                <strong>Nombre:</strong> {bodegaSel.nombre}
+              </p>
+              <p>
+                <strong>Dirección:</strong> {bodegaSel.ubicacion_fisica}
+              </p>
+              <p>
+                <strong>Capacidad:</strong> {bodegaSel.n_estantes} estantes
+              </p>
             </div>
 
             <div className="modal-actions">
               {esAdmin && (
                 <>
-                  <button className="btn-edit" onClick={irAEditar}>Editar</button>
-                  <button className="btn-delete" onClick={handleEliminar}>Eliminar</button>
+                  <button className="btn-edit" onClick={irAEditar}>
+                    Editar
+                  </button>
+                  <button className="btn-delete" onClick={handleEliminar}>
+                    Eliminar
+                  </button>
                 </>
               )}
               {!esAdmin && (
-                <button className="btn-cancel" onClick={cerrarModal}>Cerrar</button>
+                <button className="btn-cancel" onClick={cerrarModal}>
+                  Cerrar
+                </button>
               )}
             </div>
           </>

@@ -25,6 +25,6 @@ export function useLogin() {
     register,
     onSubmit,
     errors,
-    loginErrors
+    loginErrors,
   };
 }

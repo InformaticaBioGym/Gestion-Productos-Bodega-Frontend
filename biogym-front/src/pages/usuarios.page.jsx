@@ -3,7 +3,7 @@ import Footer from "../components/footer";
 import Modal from "../components/modal";
 import Table from "../components/table";
 import SearchBar from "../components/search-bar";
-import { useUsuarios } from "../hooks/usuarios.hook"; 
+import { useUsuarios } from "../hooks/usuarios.hook";
 
 function UsuariosPage() {
   const {
@@ -23,7 +23,7 @@ function UsuariosPage() {
     abrirModalAgregar,
     abrirModalVer,
     irAEditar,
-    cerrarModal
+    cerrarModal,
   } = useUsuarios();
 
   // Funcion tabla
@@ -47,15 +47,15 @@ function UsuariosPage() {
     <div className="page-container">
       <Header />
       <div className="content-scroll">
-        <SearchBar 
-          placeholder="Buscar usuario..." 
-          value={busqueda} 
-          onChange={(e) => setBusqueda(e.target.value)} 
+        <SearchBar
+          placeholder="Buscar usuario..."
+          value={busqueda}
+          onChange={(e) => setBusqueda(e.target.value)}
         />
         <div className="section-title">
           <h2>Gestión de Personal</h2>
         </div>
-        
+
         <Table
           title="Usuarios"
           data={usuariosFiltrados}
@@ -102,13 +102,25 @@ function UsuariosPage() {
               placeholder="*********"
             />
             <label>Rol</label>
-            <select name="rol" value={nuevoUsuario.rol} onChange={handleInputChange}>
+            <select
+              name="rol"
+              value={nuevoUsuario.rol}
+              onChange={handleInputChange}
+            >
               <option value="trabajador">Trabajador</option>
               <option value="administrador">Administrador</option>
             </select>
             <div className="modal-actions">
-              <button type="submit" className="btn-accept">Guardar Usuario</button>
-              <button type="button" className="btn-cancel" onClick={cerrarModal}>Cancelar</button>
+              <button type="submit" className="btn-accept">
+                Guardar Usuario
+              </button>
+              <button
+                type="button"
+                className="btn-cancel"
+                onClick={cerrarModal}
+              >
+                Cancelar
+              </button>
             </div>
           </form>
         )}
@@ -140,13 +152,25 @@ function UsuariosPage() {
               placeholder="Dejar vacía para no cambiar"
             />
             <label>Rol</label>
-            <select name="rol" value={nuevoUsuario.rol} onChange={handleInputChange}>
+            <select
+              name="rol"
+              value={nuevoUsuario.rol}
+              onChange={handleInputChange}
+            >
               <option value="trabajador">Trabajador</option>
               <option value="administrador">Administrador</option>
             </select>
             <div className="modal-actions">
-              <button type="submit" className="btn-accept">Aceptar</button>
-              <button type="button" className="btn-cancel" onClick={cerrarModal}>Cancelar</button>
+              <button type="submit" className="btn-accept">
+                Aceptar
+              </button>
+              <button
+                type="button"
+                className="btn-cancel"
+                onClick={cerrarModal}
+              >
+                Cancelar
+              </button>
             </div>
           </form>
         )}
@@ -155,13 +179,23 @@ function UsuariosPage() {
         {modalTipo === "view" && usuarioSeleccionado && (
           <>
             <div className="user-detail-info">
-              <p><strong>Nombre:</strong> {usuarioSeleccionado.nombre}</p>
-              <p><strong>Correo:</strong> {usuarioSeleccionado.correo}</p>
-              <p><strong>Rol:</strong> {usuarioSeleccionado.rol}</p>
+              <p>
+                <strong>Nombre:</strong> {usuarioSeleccionado.nombre}
+              </p>
+              <p>
+                <strong>Correo:</strong> {usuarioSeleccionado.correo}
+              </p>
+              <p>
+                <strong>Rol:</strong> {usuarioSeleccionado.rol}
+              </p>
             </div>
             <div className="modal-actions">
-              <button className="btn-edit" onClick={irAEditar}>Editar</button>
-              <button className="btn-delete" onClick={handleEliminar}>Eliminar</button>
+              <button className="btn-edit" onClick={irAEditar}>
+                Editar
+              </button>
+              <button className="btn-delete" onClick={handleEliminar}>
+                Eliminar
+              </button>
             </div>
           </>
         )}

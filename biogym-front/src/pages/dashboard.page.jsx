@@ -1,6 +1,6 @@
 import Header from "../components/header";
 import Footer from "../components/footer";
-import { useDashboard } from "../hooks/dashboard.hook"; 
+import { useDashboard } from "../hooks/dashboard.hook";
 import "./dashboard.page.css";
 
 function DashboardPage() {
@@ -9,7 +9,7 @@ function DashboardPage() {
   return (
     <div className="dashboard-container">
       <Header />
-      
+
       <main className="dashboard-content">
         <div className="menu-grid">
           {menuItems.map((item, index) => (

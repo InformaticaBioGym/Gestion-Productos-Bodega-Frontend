@@ -63,7 +63,10 @@ export function useProductos() {
       cargarProductos(busqueda);
       cerrarModal();
     } catch (error) {
-      const msg = error.response?.data?.detalle || error.response?.data?.mensaje || "Error interno";
+      const msg =
+        error.response?.data?.detalle ||
+        error.response?.data?.mensaje ||
+        "Error interno";
       toast.error("Error: " + msg);
     }
   };
@@ -124,6 +127,6 @@ export function useProductos() {
     abrirModalAdd,
     abrirModalVer,
     irAEditar,
-    cerrarModal
+    cerrarModal,
   };
 }

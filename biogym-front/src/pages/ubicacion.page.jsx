@@ -3,7 +3,7 @@ import Footer from "../components/footer";
 import Modal from "../components/modal";
 import Table from "../components/table";
 import SearchBar from "../components/search-bar";
-import { useUbicaciones } from "../hooks/ubicacion.hook"; 
+import { useUbicaciones } from "../hooks/ubicacion.hook";
 import "./ubicacion.page.css";
 
 function UbicacionesPage() {
@@ -38,7 +38,7 @@ function UbicacionesPage() {
     abrirModalAdd,
     abrirModalVer,
     irAEditar,
-    cerrarModal
+    cerrarModal,
   } = useUbicaciones();
 
   const dibujarFila = (u) => {
@@ -83,13 +83,13 @@ function UbicacionesPage() {
       <Header />
       <div className="content-scroll">
         {/* BUSCADOR */}
-        <SearchBar 
-          placeholder="Buscar por SKU o Nombre..." 
-          value={busqueda} 
+        <SearchBar
+          placeholder="Buscar por SKU o Nombre..."
+          value={busqueda}
           onChange={(e) => setBusqueda(e.target.value)}
           onSearch={cargarDatos}
         />
-        
+
         <div className="section-title">
           <h2>Mapa de Ubicaciones</h2>
         </div>
@@ -117,13 +117,14 @@ function UbicacionesPage() {
       >
         {(modalTipo === "add" || modalTipo === "edit") && (
           <form className="modal-form" onSubmit={handleGuardar}>
-            
             {/* --- AUTOCOMPLETADO DE PRODUCTOS --- */}
             <label>Producto</label>
             {selectedProdName ? (
               <div className="selected-product-badge">
                 <span>{selectedProdName}</span>
-                <span className="remove-product" onClick={quitarProducto}>✕</span>
+                <span className="remove-product" onClick={quitarProducto}>
+                  ✕
+                </span>
               </div>
             ) : (
               <div className="autocomplete-container">
@@ -136,17 +137,27 @@ function UbicacionesPage() {
                     setShowSuggestions(true);
                   }}
                   onFocus={() => setShowSuggestions(true)}
-                  style={{ border: !form.producto_id ? "1px solid #d32f2f" : "1px solid #ddd" }}
+                  style={{
+                    border: !form.producto_id
+                      ? "1px solid #d32f2f"
+                      : "1px solid #ddd",
+                  }}
                 />
                 {showSuggestions && prodSearchTerm && (
                   <div className="suggestions-list">
                     {productosSugeridos.map((p) => (
-                      <div key={p.id} className="suggestion-item" onClick={() => seleccionarProducto(p)}>
+                      <div
+                        key={p.id}
+                        className="suggestion-item"
+                        onClick={() => seleccionarProducto(p)}
+                      >
                         {p.nombre} <strong>(SKU: {p.sku})</strong>
                       </div>
                     ))}
                     {productosSugeridos.length === 0 && (
-                      <div style={{ padding: 10, color: "#999" }}>No se encontraron productos.</div>
+                      <div style={{ padding: 10, color: "#999" }}>
+                        No se encontraron productos.
+                      </div>
                     )}
                   </div>
                 )}
@@ -154,10 +165,17 @@ function UbicacionesPage() {
             )}
 
             <label>Bodega</label>
-            <select name="bodega_id" value={form.bodega_id} onChange={handleInputChange} required>
+            <select
+              name="bodega_id"
+              value={form.bodega_id}
+              onChange={handleInputChange}
+              required
+            >
               <option value="">-- Selecciona Bodega --</option>
               {listaBodegas.map((b) => (
-                <option key={b.id} value={b.id}>{b.nombre}</option>
+                <option key={b.id} value={b.id}>
+                  {b.nombre}
+                </option>
               ))}
             </select>
 
@@ -189,11 +207,20 @@ function UbicacionesPage() {
                 type="submit"
                 className="btn-accept"
                 disabled={enviando}
-                style={{ opacity: enviando ? 0.7 : 1, cursor: enviando ? "not-allowed" : "pointer" }}
+                style={{
+                  opacity: enviando ? 0.7 : 1,
+                  cursor: enviando ? "not-allowed" : "pointer",
+                }}
               >
                 {enviando ? "Guardando..." : "Guardar"}
               </button>
-              <button type="button" className="btn-cancel" onClick={cerrarModal}>Cancelar</button>
+              <button
+                type="button"
+                className="btn-cancel"
+                onClick={cerrarModal}
+              >
+                Cancelar
+              </button>
             </div>
           </form>
         )}
@@ -208,27 +235,43 @@ function UbicacionesPage() {
               onClick={() => setImgModalUrl(previewUrl)}
             />
             <div className="user-detail-info">
-              <p><strong>Producto:</strong> {ubicacionSel.producto?.nombre}</p>
-              <p><strong>SKU:</strong> {ubicacionSel.producto?.sku}</p>
+              <p>
+                <strong>Producto:</strong> {ubicacionSel.producto?.nombre}
+              </p>
+              <p>
+                <strong>SKU:</strong> {ubicacionSel.producto?.sku}
+              </p>
               <p>
                 <strong>Ubicación:</strong> {ubicacionSel.bodega?.nombre}
                 {ubicacionSel.estante && ` - Estante ${ubicacionSel.estante}`}
               </p>
               <p>
                 <strong>Descripción:</strong>{" "}
-                {ubicacionSel.descripcion || <span style={{ color: "#999", fontStyle: "italic" }}>No especificada</span>}
+                {ubicacionSel.descripcion || (
+                  <span style={{ color: "#999", fontStyle: "italic" }}>
+                    No especificada
+                  </span>
+                )}
               </p>
             </div>
             <div className="modal-actions">
-              <button className="btn-edit" onClick={irAEditar}>Editar</button>
-              <button className="btn-delete" onClick={handleEliminar}>Eliminar</button>
+              <button className="btn-edit" onClick={irAEditar}>
+                Editar
+              </button>
+              <button className="btn-delete" onClick={handleEliminar}>
+                Eliminar
+              </button>
             </div>
           </>
         )}
       </Modal>
 
       {/* === ZOOM IMAGEN === */}
-      <Modal isOpen={!!imgModalUrl} onClose={() => setImgModalUrl(null)} title="Vista Previa">
+      <Modal
+        isOpen={!!imgModalUrl}
+        onClose={() => setImgModalUrl(null)}
+        title="Vista Previa"
+      >
         {imgModalUrl && (
           <img src={imgModalUrl} alt="Expandida" className="lightbox-image" />
         )}

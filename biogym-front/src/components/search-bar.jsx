@@ -1,12 +1,6 @@
-import "../styles/layout.css"; 
+import "../styles/layout.css";
 
-function SearchBar({ 
-  placeholder = "Buscar...", 
-  value, 
-  onChange, 
-  onSearch 
-}) {
-  
+function SearchBar({ placeholder = "Buscar...", value, onChange, onSearch }) {
   const handleKeyDown = (e) => {
     if (e.key === "Enter" && onSearch) {
       onSearch(value);

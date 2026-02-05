@@ -63,7 +63,10 @@ export function useBodegas() {
       cargarBodegas();
       setModalOpen(false);
     } catch (error) {
-      const msg = error.response?.data?.detalle || error.response?.data?.mensaje || "Error interno";
+      const msg =
+        error.response?.data?.detalle ||
+        error.response?.data?.mensaje ||
+        "Error interno";
       toast.error("Error: " + msg);
     }
   };
@@ -102,7 +105,7 @@ export function useBodegas() {
   };
 
   const cerrarModal = () => setModalOpen(false);
-  
+
   const irAEditar = () => setModalTipo("edit");
 
   const bodegasFiltradas = bodegas.filter((b) => {
@@ -129,6 +132,6 @@ export function useBodegas() {
     abrirModalAdd,
     abrirModalVer,
     cerrarModal,
-    irAEditar
+    irAEditar,
   };
 }

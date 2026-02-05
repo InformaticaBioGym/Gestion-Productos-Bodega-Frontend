@@ -11,7 +11,7 @@ export function useUsuarios() {
   const [usuarios, setUsuarios] = useState([]);
   const [busqueda, setBusqueda] = useState("");
   const [cargando, setCargando] = useState(false);
-  
+
   // Modal
   const [modalOpen, setModalOpen] = useState(false);
   const [modalTipo, setModalTipo] = useState(null);
@@ -65,7 +65,10 @@ export function useUsuarios() {
       cargarUsuarios();
       cerrarModal();
     } catch (error) {
-      const errorMsg = error.response?.data?.detalle || error.response?.data?.mensaje || "Error interno";
+      const errorMsg =
+        error.response?.data?.detalle ||
+        error.response?.data?.mensaje ||
+        "Error interno";
       toast.error("Error al crear usuario: " + errorMsg);
     }
   };
@@ -82,7 +85,10 @@ export function useUsuarios() {
       cargarUsuarios();
       cerrarModal();
     } catch (error) {
-      const errorMsg = error.response?.data?.detalle || error.response?.data?.mensaje || "Error interno";
+      const errorMsg =
+        error.response?.data?.detalle ||
+        error.response?.data?.mensaje ||
+        "Error interno";
       toast.error("Error al actualizar: " + errorMsg);
     }
   };
@@ -109,7 +115,12 @@ export function useUsuarios() {
   // --- CONTROL DEL MODAL ---
   const abrirModalAgregar = () => {
     setUsuarioSeleccionado(null);
-    setNuevoUsuario({ nombre: "", correo: "", contraseña: "", rol: "trabajador" });
+    setNuevoUsuario({
+      nombre: "",
+      correo: "",
+      contraseña: "",
+      rol: "trabajador",
+    });
     setModalTipo("add");
     setModalOpen(true);
   };
@@ -157,6 +168,6 @@ export function useUsuarios() {
     abrirModalAgregar,
     abrirModalVer,
     irAEditar,
-    cerrarModal
+    cerrarModal,
   };
 }
