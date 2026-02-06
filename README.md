@@ -32,7 +32,6 @@ Este software democratiza la información de la bodega. Permite que cualquier tr
 El proyecto se encuentra desplegado y funcional en la nube para pruebas y uso inmediato:
 
 * 🌐 **Aplicación Web:** [https://gestion-productos-bodega-frontend.vercel.app/](https://gestion-productos-bodega-frontend.vercel.app/)
-* 🛠️ **API Backend:** [https://biogym-backend.onrender.com/health](https://biogym-backend.onrender.com/health)
 
 ### 🔑 Credenciales de Acceso (Demo)
 Para facilitar la evaluación y pruebas, el sistema cuenta con un usuario administrador por defecto:
