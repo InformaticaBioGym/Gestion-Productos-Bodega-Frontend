@@ -33,12 +33,7 @@ El proyecto se encuentra desplegado y funcional en la nube para pruebas y uso in
 
 * 🌐 **Aplicación Web:** [https://gestion-productos-bodega-frontend.vercel.app/](https://gestion-productos-bodega-frontend.vercel.app/)
 
-### 🔑 Credenciales de Acceso (Demo)
-Para facilitar la evaluación y pruebas, el sistema cuenta con un usuario administrador por defecto:
-* **Correo:** `admin@biogym.com`
-* **Contraseña:** `admin123`
-
-> **Nota:** El sistema recrea automáticamente este usuario si no existe en la base de datos al reiniciarse.
+> **Nota:** El sistema recrea automáticamente un usuario inicial si no existe en la base de datos al reiniciarse.
 
 ---
 
