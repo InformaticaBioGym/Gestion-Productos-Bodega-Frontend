@@ -7,7 +7,7 @@ export function useLogin() {
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isSubmitting },
   } = useForm();
 
   const { signin, isAuthenticated, errors: loginErrors } = useAuth();
@@ -18,7 +18,7 @@ export function useLogin() {
   }, [isAuthenticated, navigate]);
 
   const onSubmit = handleSubmit(async (values) => {
-    signin(values);
+    await signin(values);
   });
 
   return {
@@ -26,5 +26,6 @@ export function useLogin() {
     onSubmit,
     errors,
     loginErrors,
+    loading: isSubmitting,
   };
 }

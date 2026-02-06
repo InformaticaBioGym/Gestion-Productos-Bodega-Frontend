@@ -2,7 +2,7 @@ import { useLogin } from "../hooks/login.hook";
 import "./login.page.css";
 
 function LoginPage() {
-  const { register, onSubmit, errors, loginErrors } = useLogin();
+  const { register, onSubmit, errors, loginErrors, loading } = useLogin();
 
   return (
     <div className="login-container">
@@ -45,7 +45,9 @@ function LoginPage() {
             )}
           </div>
 
-          <button type="submit">Ingresar</button>
+          <button type="submit" disabled={loading}>
+            {loading ? "Ingresando..." : "Ingresar"}
+          </button>
         </form>
       </div>
     </div>
