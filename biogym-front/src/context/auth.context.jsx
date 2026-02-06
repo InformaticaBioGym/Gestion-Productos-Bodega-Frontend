@@ -16,8 +16,13 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [errors, setErrors] = useState([]);
-
   const [loading, setLoading] = useState(true);
+
+  const logout = () => {
+    localStorage.removeItem("token");
+    setUser(null);
+    setIsAuthenticated(false);
+  };
 
   const signin = async (user) => {
     try {
@@ -44,12 +49,6 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  const logout = () => {
-    localStorage.removeItem("token");
-    setUser(null);
-    setIsAuthenticated(false);
-  };
-
   useEffect(() => {
     if (errors.length > 0) {
       const timer = setTimeout(() => {
@@ -70,6 +69,13 @@ export const AuthProvider = ({ children }) => {
       }
       try {
         const decoded = jwtDecode(token);
+        const currentTime = Date.now() / 1000;
+        if (decoded.exp < currentTime) {
+          console.log("Token expirado (Frontend Check)");
+          logout();
+          setLoading(false);
+          return;
+        }
         setUser(decoded);
         setIsAuthenticated(true);
       } catch (error) {
