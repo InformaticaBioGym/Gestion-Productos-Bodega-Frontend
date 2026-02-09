@@ -9,6 +9,7 @@ function ProductosPage() {
   const {
     productos,
     cargando,
+    enviando,
     busqueda,
     setBusqueda,
     esAdmin,
@@ -92,8 +93,13 @@ function ProductosPage() {
               placeholder="Ej: Mancuerna 10kg"
             />
             <div className="modal-actions">
-              <button type="submit" className="btn-accept">
-                Guardar
+              <button
+                type="submit"
+                className="btn-accept"
+                disabled={enviando}
+                style={{ opacity: enviando ? 0.7 : 1 }}
+              >
+                {enviando ? "Guardando..." : "Guardar"}
               </button>
               <button
                 type="button"
@@ -123,8 +129,13 @@ function ProductosPage() {
                 Editar
               </button>
               {esAdmin && (
-                <button className="btn-delete" onClick={handleEliminar}>
-                  Eliminar
+                <button
+                  className="btn-delete"
+                  onClick={handleEliminar}
+                  disabled={enviando}
+                  style={{ opacity: enviando ? 0.7 : 1 }}
+                >
+                  {enviando ? "Eliminando..." : "Eliminar"}
                 </button>
               )}
             </div>

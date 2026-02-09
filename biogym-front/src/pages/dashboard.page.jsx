@@ -4,7 +4,6 @@ import Footer from "../components/footer";
 import { useDashboard } from "../hooks/dashboard.hook";
 import "./dashboard.page.css";
 
-
 function DashboardPage() {
   const { menuItems, user } = useDashboard();
   const [isFlipped, setIsFlipped] = useState(false);
@@ -14,11 +13,11 @@ function DashboardPage() {
       <Header />
       <main className="dashboard-content">
         <div className="menu-grid">
-          {menuItems.map((item, index) => {            
+          {menuItems.map((item, index) => {
             if (item.tipo === "perfil") {
               return (
-                <div 
-                  key={index} 
+                <div
+                  key={index}
                   className={`menu-card flip-container ${isFlipped ? "flipped" : ""}`}
                   onClick={() => setIsFlipped(!isFlipped)}
                 >
@@ -34,7 +33,13 @@ function DashboardPage() {
                       <div className="profile-info">
                         <h3>{user?.nombre || "Usuario"}</h3>
                         <p>{user?.correo}</p>
-                        <p style={{marginTop: '10px', fontSize: '0.7rem', color: '#ccc'}}>
+                        <p
+                          style={{
+                            marginTop: "10px",
+                            fontSize: "0.7rem",
+                            color: "#ccc",
+                          }}
+                        >
                           {user?.rol?.toUpperCase()}
                         </p>
                       </div>

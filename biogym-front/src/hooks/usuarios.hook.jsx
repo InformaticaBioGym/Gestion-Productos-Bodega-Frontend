@@ -11,6 +11,7 @@ export function useUsuarios() {
   const [usuarios, setUsuarios] = useState([]);
   const [busqueda, setBusqueda] = useState("");
   const [cargando, setCargando] = useState(false);
+  const [enviando, setEnviando] = useState(false);
 
   // Modal
   const [modalOpen, setModalOpen] = useState(false);
@@ -59,6 +60,8 @@ export function useUsuarios() {
   // --- CRUD  ---
   const handleCrearUsuario = async (e) => {
     e.preventDefault();
+    if (enviando) return;
+    setEnviando(true);
     try {
       await crearUsuarioRequest(nuevoUsuario);
       toast.success("Usuario creado con éxito");
@@ -70,11 +73,15 @@ export function useUsuarios() {
         error.response?.data?.mensaje ||
         "Error interno";
       toast.error("Error al crear usuario: " + errorMsg);
+    } finally {
+      setEnviando(false);
     }
   };
 
   const handleEditarUsuario = async (e) => {
     e.preventDefault();
+    if (enviando) return;
+    setEnviando(true);
     try {
       const datosActualizados = { ...nuevoUsuario };
       if (!datosActualizados.contraseña) {
@@ -90,6 +97,8 @@ export function useUsuarios() {
         error.response?.data?.mensaje ||
         "Error interno";
       toast.error("Error al actualizar: " + errorMsg);
+    } finally {
+      setEnviando(false);
     }
   };
 
@@ -98,6 +107,7 @@ export function useUsuarios() {
       action: {
         label: "Eliminar",
         onClick: async () => {
+          setEnviando(true);
           try {
             await eliminarUsuarioRequest(usuarioSeleccionado.id);
             toast.success("Usuario eliminado");
@@ -105,6 +115,8 @@ export function useUsuarios() {
             cerrarModal();
           } catch (error) {
             toast.error("No se pudo eliminar al usuario");
+          } finally {
+            setEnviando(false);
           }
         },
       },
@@ -155,6 +167,7 @@ export function useUsuarios() {
     usuariosFiltrados,
     cargando,
     busqueda,
+    enviando,
     modalOpen,
     modalTipo,
     usuarioSeleccionado,

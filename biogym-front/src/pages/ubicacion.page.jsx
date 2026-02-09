@@ -258,8 +258,16 @@ function UbicacionesPage() {
               <button className="btn-edit" onClick={irAEditar}>
                 Editar
               </button>
-              <button className="btn-delete" onClick={handleEliminar}>
-                Eliminar
+              <button
+                className="btn-delete"
+                onClick={handleEliminar}
+                disabled={enviando}
+                style={{
+                  opacity: enviando ? 0.7 : 1,
+                  cursor: enviando ? "not-allowed" : "pointer",
+                }}
+              >
+                {enviando ? "Eliminando..." : "Eliminar"}
               </button>
             </div>
           </>

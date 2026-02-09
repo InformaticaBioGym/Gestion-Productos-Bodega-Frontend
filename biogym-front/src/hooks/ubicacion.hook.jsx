@@ -165,6 +165,7 @@ export function useUbicaciones() {
       action: {
         label: "Eliminar",
         onClick: async () => {
+          setEnviando(true);
           try {
             await eliminarUbicacionRequest(ubicacionSel.id);
             toast.success("Ubicación eliminada");
@@ -172,6 +173,8 @@ export function useUbicaciones() {
             setModalOpen(false);
           } catch (e) {
             toast.error("Error al eliminar la ubicación");
+          } finally {
+            setEnviando(false);
           }
         },
       },

@@ -15,6 +15,7 @@ export function useProductos() {
   const [productos, setProductos] = useState([]);
   const [busqueda, setBusqueda] = useState("");
   const [cargando, setCargando] = useState(false);
+  const [enviando, setEnviando] = useState(false);
 
   // Modal
   const [modalOpen, setModalOpen] = useState(false);
@@ -52,6 +53,8 @@ export function useProductos() {
   //---crud---
   const handleGuardar = async (e) => {
     e.preventDefault();
+    if (enviando) return;
+    setEnviando(true);
     try {
       if (modalTipo === "add") {
         await crearProductoRequest(formProd);
@@ -68,6 +71,8 @@ export function useProductos() {
         error.response?.data?.mensaje ||
         "Error interno";
       toast.error("Error: " + msg);
+    } finally {
+      setEnviando(false);
     }
   };
 
@@ -76,6 +81,7 @@ export function useProductos() {
       action: {
         label: "Eliminar",
         onClick: async () => {
+          setEnviando(true);
           try {
             await eliminarProductoRequest(prodSeleccionado.id);
             toast.success("Producto eliminado");
@@ -83,6 +89,8 @@ export function useProductos() {
             cerrarModal();
           } catch (error) {
             toast.error("Error al eliminar el producto");
+          } finally {
+            setEnviando(false);
           }
         },
       },
@@ -114,6 +122,7 @@ export function useProductos() {
     productos,
     cargando,
     busqueda,
+    enviando,
     esAdmin,
     modalOpen,
     modalTipo,

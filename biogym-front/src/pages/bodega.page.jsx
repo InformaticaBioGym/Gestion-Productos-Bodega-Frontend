@@ -8,6 +8,7 @@ function BodegasPage() {
   const {
     bodegasFiltradas,
     cargando,
+    enviando,
     busqueda,
     setBusqueda,
     esAdmin,
@@ -108,8 +109,13 @@ function BodegasPage() {
               placeholder="1, 2, 3..."
             />
             <div className="modal-actions">
-              <button type="submit" className="btn-accept">
-                Guardar
+              <button
+                type="submit"
+                className="btn-accept"
+                disabled={enviando}
+                style={{ opacity: enviando ? 0.7 : 1 }}
+              >
+                {enviando ? "Guardando..." : "Guardar"}
               </button>
               <button
                 type="button"
@@ -142,8 +148,13 @@ function BodegasPage() {
                   <button className="btn-edit" onClick={irAEditar}>
                     Editar
                   </button>
-                  <button className="btn-delete" onClick={handleEliminar}>
-                    Eliminar
+                  <button
+                    className="btn-delete"
+                    onClick={handleEliminar}
+                    disabled={enviando}
+                    style={{ opacity: enviando ? 0.7 : 1 }}
+                  >
+                    {enviando ? "Eliminando..." : "Eliminar"}
                   </button>
                 </>
               )}

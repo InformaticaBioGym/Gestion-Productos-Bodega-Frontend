@@ -9,6 +9,7 @@ function UsuariosPage() {
   const {
     usuariosFiltrados,
     cargando,
+    enviando,
     busqueda,
     setBusqueda,
     modalOpen,
@@ -111,8 +112,13 @@ function UsuariosPage() {
               <option value="administrador">Administrador</option>
             </select>
             <div className="modal-actions">
-              <button type="submit" className="btn-accept">
-                Guardar Usuario
+              <button
+                type="submit"
+                className="btn-accept"
+                disabled={enviando}
+                style={{ opacity: enviando ? 0.7 : 1 }}
+              >
+                {enviando ? "Guardando..." : "Guardar Usuario"}
               </button>
               <button
                 type="button"
@@ -161,8 +167,13 @@ function UsuariosPage() {
               <option value="administrador">Administrador</option>
             </select>
             <div className="modal-actions">
-              <button type="submit" className="btn-accept">
-                Aceptar
+              <button
+                type="submit"
+                className="btn-accept"
+                disabled={enviando}
+                style={{ opacity: enviando ? 0.7 : 1 }}
+              >
+                {enviando ? "Guardando..." : "Aceptar"}
               </button>
               <button
                 type="button"
@@ -193,8 +204,13 @@ function UsuariosPage() {
               <button className="btn-edit" onClick={irAEditar}>
                 Editar
               </button>
-              <button className="btn-delete" onClick={handleEliminar}>
-                Eliminar
+              <button
+                className="btn-delete"
+                onClick={handleEliminar}
+                disabled={enviando}
+                style={{ opacity: enviando ? 0.7 : 1 }}
+              >
+                {enviando ? "Eliminando..." : "Eliminar"}
               </button>
             </div>
           </>

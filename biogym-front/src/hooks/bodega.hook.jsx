@@ -15,6 +15,7 @@ export function useBodegas() {
   const [bodegas, setBodegas] = useState([]);
   const [busqueda, setBusqueda] = useState("");
   const [cargando, setCargando] = useState(false);
+  const [enviando, setEnviando] = useState(false);
 
   // Modal
   const [modalOpen, setModalOpen] = useState(false);
@@ -52,6 +53,8 @@ export function useBodegas() {
 
   const handleGuardar = async (e) => {
     e.preventDefault();
+    if (enviando) return;
+    setEnviando(true);
     try {
       if (modalTipo === "add") {
         await crearBodegaRequest(form);
@@ -68,6 +71,8 @@ export function useBodegas() {
         error.response?.data?.mensaje ||
         "Error interno";
       toast.error("Error: " + msg);
+    } finally {
+      setEnviando(false);
     }
   };
 
@@ -76,6 +81,7 @@ export function useBodegas() {
       action: {
         label: "Eliminar",
         onClick: async () => {
+          setEnviando(true);
           try {
             await eliminarBodegaRequest(bodegaSel.id);
             toast.success("Bodega eliminada");
@@ -83,6 +89,8 @@ export function useBodegas() {
             setModalOpen(false);
           } catch (error) {
             toast.error("No se pudo eliminar (¿Tiene productos asignados?)");
+          } finally {
+            setEnviando(false);
           }
         },
       },
@@ -120,6 +128,7 @@ export function useBodegas() {
     bodegasFiltradas,
     cargando,
     busqueda,
+    enviando,
     esAdmin,
     modalOpen,
     modalTipo,
