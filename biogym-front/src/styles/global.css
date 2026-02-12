@@ -22,7 +22,8 @@ body {
   left: 50% !important;
   transform: translateX(-50%) !important;
   margin: 0 !important;
-  z-index: 9999 !important;
+  pointer-events: none !important;
+  z-index: 999999 !important;
   width: 380px !important;
 }
 
@@ -36,6 +37,7 @@ body {
   gap: 14px !important;
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12) !important;
   border: 1px solid #e5e7eb !important;
+  pointer-events: auto !important;
 }
 
 [data-sonner-toast] [data-title] {
