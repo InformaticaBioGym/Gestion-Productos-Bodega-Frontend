@@ -16,6 +16,9 @@ export function useUbicaciones() {
   const [listaProductos, setListaProductos] = useState([]);
   const [listaBodegas, setListaBodegas] = useState([]);
 
+  const [productosSugeridos, setProductosSugeridos] = useState([]);
+  const [buscandoProd, setBuscandoProd] = useState(false);
+
   const [busqueda, setBusqueda] = useState("");
   const [cargando, setCargando] = useState(false);
   const [enviando, setEnviando] = useState(false);
@@ -42,6 +45,31 @@ export function useUbicaciones() {
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [selectedProdName, setSelectedProdName] = useState(null);
 
+  useEffect(() => {
+    if (prodSearchTerm.length < 2) {
+      setProductosSugeridos([]);
+      return;
+    }
+    const delayDebounceFn = setTimeout(async () => {
+      setBuscandoProd(true);
+      try {
+        const res = await obtenerProductosRequest(prodSearchTerm);
+        setProductosSugeridos(res.data);
+        setShowSuggestions(true);
+      } catch (error) {
+        if (error.response?.status === 404) {
+          setProductosSugeridos([]);
+        } else {
+          console.error("Error buscando productos:", error);
+        }
+      } finally {
+        setBuscandoProd(false);
+      }
+    }, 500);
+
+    return () => clearTimeout(delayDebounceFn);
+  }, [prodSearchTerm]);
+
   // --- DATOS ---
   const cargarDatos = async (termino = "") => {
     try {
@@ -51,18 +79,7 @@ export function useUbicaciones() {
         setUbicaciones(Array.isArray(resUbi.data) ? resUbi.data : []);
       } catch (e) {
         if (e.response?.status === 404) setUbicaciones([]);
-        else console.error("Error al cargar ubicaciones:", e);
       }
-
-      if (listaProductos.length === 0) {
-        try {
-          const resProd = await obtenerProductosRequest();
-          setListaProductos(Array.isArray(resProd.data) ? resProd.data : []);
-        } catch (e) {
-          console.error("Error productos:", e);
-        }
-      }
-
       if (listaBodegas.length === 0) {
         try {
           const resBod = await obtenerBodegasRequest();
@@ -87,16 +104,6 @@ export function useUbicaciones() {
     if (!img) return "https://via.placeholder.com/50?text=Sin+Foto";
     return img.startsWith("http") ? img : `${API_URL}/${img}`;
   };
-
-  const productosSugeridos = listaProductos
-    .filter((p) => {
-      const term = prodSearchTerm.toLowerCase();
-      return (
-        p.nombre.toLowerCase().includes(term) ||
-        p.sku.toLowerCase().includes(term)
-      );
-    })
-    .slice(0, 10);
 
   const seleccionarProducto = (prod) => {
     setForm({ ...form, producto_id: prod.id });
@@ -194,6 +201,7 @@ export function useUbicaciones() {
     setProdSearchTerm("");
     setSelectedProdName(null);
     setShowSuggestions(false);
+    setProductosSugeridos([]);
     setModalTipo("add");
     setModalOpen(true);
   };
@@ -222,6 +230,7 @@ export function useUbicaciones() {
     ubicaciones,
     listaBodegas,
     productosSugeridos,
+    buscandoProd,
     busqueda,
     cargando,
     enviando,

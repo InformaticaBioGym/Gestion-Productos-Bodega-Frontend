@@ -26,6 +26,8 @@ export function useProductos() {
   const [formProd, setFormProd] = useState({
     sku: "",
     nombre: "",
+    codigo_barra: "",
+    observaciones: "",
   });
 
   // ---DATOS---
@@ -100,14 +102,19 @@ export function useProductos() {
 
   // --- MODAL ---
   const abrirModalAdd = () => {
-    setFormProd({ sku: "", nombre: "" });
+    setFormProd({ sku: "", nombre: "", codigo_barra: "", observaciones: "" });
     setModalTipo("add");
     setModalOpen(true);
   };
 
   const abrirModalVer = (prod) => {
     setProdSeleccionado(prod);
-    setFormProd({ sku: prod.sku, nombre: prod.nombre });
+    setFormProd({
+      sku: prod.sku,
+      nombre: prod.nombre,
+      codigo_barra: prod.codigo_barra || "",
+      observaciones: prod.observaciones || "",
+    });
     setModalTipo("view");
     setModalOpen(true);
   };
@@ -128,6 +135,7 @@ export function useProductos() {
     modalTipo,
     prodSeleccionado,
     formProd,
+    setFormProd,
     setBusqueda,
     cargarProductos,
     handleInputChange,

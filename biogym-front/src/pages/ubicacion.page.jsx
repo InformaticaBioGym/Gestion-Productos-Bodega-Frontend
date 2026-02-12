@@ -1,8 +1,10 @@
+import { useState } from "react";
 import Header from "../components/header";
 import Footer from "../components/footer";
 import Modal from "../components/modal";
 import Table from "../components/table";
 import SearchBar from "../components/search-bar";
+import BarcodeScannerModal from "../components/barcode-scanner-modal";
 import { useUbicaciones } from "../hooks/ubicacion.hook";
 import "./ubicacion.page.css";
 
@@ -11,6 +13,7 @@ function UbicacionesPage() {
     ubicaciones,
     listaBodegas,
     productosSugeridos,
+    buscandoProd,
     busqueda,
     cargando,
     enviando,
@@ -40,6 +43,8 @@ function UbicacionesPage() {
     irAEditar,
     cerrarModal,
   } = useUbicaciones();
+
+  const [showAddScanner, setShowAddScanner] = useState(false);
 
   const dibujarFila = (u) => {
     const fullImgUrl = obtenerUrlImagen(u.foto);
@@ -84,10 +89,11 @@ function UbicacionesPage() {
       <div className="content-scroll">
         {/* BUSCADOR */}
         <SearchBar
-          placeholder="Buscar por SKU o Nombre..."
+          placeholder="Buscar por SKU, Nombre o Código..."
           value={busqueda}
           onChange={(e) => setBusqueda(e.target.value)}
           onSearch={cargarDatos}
+          showScanner={true}
         />
 
         <div className="section-title">
@@ -128,37 +134,87 @@ function UbicacionesPage() {
               </div>
             ) : (
               <div className="autocomplete-container">
-                <input
-                  type="text"
-                  placeholder="Escribe para buscar producto..."
-                  value={prodSearchTerm}
-                  onChange={(e) => {
-                    setProdSearchTerm(e.target.value);
-                    setShowSuggestions(true);
-                  }}
-                  onFocus={() => setShowSuggestions(true)}
-                  style={{
-                    border: !form.producto_id
-                      ? "1px solid #d32f2f"
-                      : "1px solid #ddd",
-                  }}
-                />
-                {showSuggestions && prodSearchTerm && (
+                <div style={{ display: "flex", gap: "5px" }}>
+                  <input
+                    type="text"
+                    placeholder="Escribe para buscar producto..."
+                    value={prodSearchTerm}
+                    onChange={(e) => {
+                      setProdSearchTerm(e.target.value);
+                    }}
+                    onFocus={() => {
+                      if (productosSugeridos.length > 0)
+                        setShowSuggestions(true);
+                    }}
+                    style={{
+                      border: !form.producto_id
+                        ? "1px solid #d32f2f"
+                        : "1px solid #ddd",
+                      flex: 1,
+                    }}
+                    autoComplete="off"
+                  />
+                  <button
+                    type="button"
+                    className="btn-scan-mini"
+                    onClick={() => setShowAddScanner(true)}
+                    style={{
+                      padding: "0 10px",
+                      border: "1px solid #ccc",
+                      borderRadius: "5px",
+                      cursor: "pointer",
+                      background: "#f5f5f5",
+                      fontSize: "1.2rem",
+                    }}
+                    title="Escanear Producto"
+                  >
+                    📷
+                  </button>
+                </div>
+                {/* Lista de Sugerencias */}
+                {showSuggestions && (
                   <div className="suggestions-list">
-                    {productosSugeridos.map((p) => (
+                    {buscandoProd && (
                       <div
-                        key={p.id}
-                        className="suggestion-item"
-                        onClick={() => seleccionarProducto(p)}
+                        style={{
+                          padding: 10,
+                          color: "#666",
+                          fontStyle: "italic",
+                        }}
                       >
-                        {p.nombre} <strong>(SKU: {p.sku})</strong>
-                      </div>
-                    ))}
-                    {productosSugeridos.length === 0 && (
-                      <div style={{ padding: 10, color: "#999" }}>
-                        No se encontraron productos.
+                        Buscando...
                       </div>
                     )}
+
+                    {!buscandoProd &&
+                      productosSugeridos.map((p) => (
+                        <div
+                          key={p.id}
+                          className="suggestion-item"
+                          onClick={() => seleccionarProducto(p)}
+                        >
+                          {p.nombre} <strong>(SKU: {p.sku})</strong>
+                          {p.codigo_barra && (
+                            <span
+                              style={{
+                                fontSize: "0.8em",
+                                color: "#888",
+                                display: "block",
+                              }}
+                            >
+                              Code: {p.codigo_barra}
+                            </span>
+                          )}
+                        </div>
+                      ))}
+
+                    {!buscandoProd &&
+                      productosSugeridos.length === 0 &&
+                      prodSearchTerm.length >= 2 && (
+                        <div style={{ padding: 10, color: "#999" }}>
+                          No se encontraron productos.
+                        </div>
+                      )}
                   </div>
                 )}
               </div>
@@ -253,6 +309,29 @@ function UbicacionesPage() {
                   </span>
                 )}
               </p>
+              <p>
+                <strong>Fecha Registro:</strong>{" "}
+                {ubicacionSel.fecha_creacion
+                  ? new Date(ubicacionSel.fecha_creacion).toLocaleString(
+                      "es-CL",
+                    )
+                  : "Desconocida"}
+              </p>
+              {ubicacionSel.producto?.observaciones && (
+                <div
+                  style={{
+                    backgroundColor: "#fff9c4",
+                    border: "2px dashed #fbc02d",
+                    color: "#f57f17",
+                    padding: "10px",
+                    borderRadius: "8px",
+                    marginTop: "15px",
+                    fontWeight: "500",
+                  }}
+                >
+                  ⚠️ Observación: {ubicacionSel.producto.observaciones}
+                </div>
+              )}
             </div>
             <div className="modal-actions">
               <button className="btn-edit" onClick={irAEditar}>

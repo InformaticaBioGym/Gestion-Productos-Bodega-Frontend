@@ -1,8 +1,10 @@
+import { useState } from "react";
 import Header from "../components/header";
 import Footer from "../components/footer";
 import Modal from "../components/modal";
 import Table from "../components/table";
 import SearchBar from "../components/search-bar";
+import BarcodeScannerModal from "../components/barcode-scanner-modal";
 import { useProductos } from "../hooks/producto.hook";
 
 function ProductosPage() {
@@ -17,6 +19,7 @@ function ProductosPage() {
     modalTipo,
     prodSeleccionado,
     formProd,
+    setFormProd,
     cargarProductos,
     handleInputChange,
     handleGuardar,
@@ -27,6 +30,8 @@ function ProductosPage() {
     cerrarModal,
   } = useProductos();
 
+  const [showFormScanner, setShowFormScanner] = useState(false);
+
   const dibujarFilaProducto = (p) => (
     <div key={p.id} className="list-row">
       <div className="user-data">
@@ -34,6 +39,14 @@ function ProductosPage() {
         <div className="user-subdata">
           <span style={{ fontWeight: "bold" }}>SKU: {p.sku}</span>
         </div>
+        {p.codigo_barra && (
+          <div
+            className="user-subdata"
+            style={{ fontSize: "0.8rem", color: "#666" }}
+          >
+            Code: {p.codigo_barra}
+          </div>
+        )}
       </div>
       <button className="btn-view" onClick={() => abrirModalVer(p)}>
         Ver
@@ -47,10 +60,11 @@ function ProductosPage() {
       <div className="content-scroll">
         {/* BUSCADOR */}
         <SearchBar
-          placeholder="Buscar por SKU o Nombre..."
+          placeholder="Buscar por SKU, Nombre o Código..."
           value={busqueda}
           onChange={(e) => setBusqueda(e.target.value)}
-          onSearch={cargarProductos} // 👈 ¡Aquí está la magia!
+          onSearch={cargarProductos}
+          showScanner={true}
         />
 
         <div className="section-title">
@@ -76,6 +90,14 @@ function ProductosPage() {
         {/* FORMULARIO añadir / editar */}
         {(modalTipo === "add" || modalTipo === "edit") && (
           <form className="modal-form" onSubmit={handleGuardar}>
+            <label>Nombre</label>
+            <input
+              name="nombre"
+              value={formProd.nombre}
+              onChange={handleInputChange}
+              required
+              placeholder="Ej: Mancuerna 10kg"
+            />
             <label>SKU </label>
             <input
               name="sku"
@@ -84,13 +106,36 @@ function ProductosPage() {
               required
               placeholder="Ej: PROD-123"
             />
-            <label>Nombre</label>
+            <label>Código de Barras</label>
+            <div style={{ display: "flex", gap: "10px", alignItems: "center" }}>
+              <input
+                name="codigo_barra"
+                value={formProd.codigo_barra}
+                onChange={handleInputChange}
+                placeholder="Escanea o escribe..."
+                style={{ flex: 1 }}
+              />
+              <button
+                type="button"
+                onClick={() => setShowFormScanner(true)}
+                style={{
+                  padding: "8px",
+                  borderRadius: "5px",
+                  border: "1px solid #ccc",
+                  cursor: "pointer",
+                  backgroundColor: "#f0f0f0",
+                }}
+                title="Escanear Código"
+              >
+                📷
+              </button>
+            </div>
+            <label>Observaciones</label>
             <input
-              name="nombre"
-              value={formProd.nombre}
+              name="observaciones"
+              value={formProd.observaciones}
               onChange={handleInputChange}
-              required
-              placeholder="Ej: Mancuerna 10kg"
+              placeholder="ej: esta en 2 cajas, frágil, etc."
             />
             <div className="modal-actions">
               <button
@@ -117,10 +162,28 @@ function ProductosPage() {
           <>
             <div className="user-detail-info">
               <p>
+                <strong>Nombre:</strong> {prodSeleccionado.nombre}
+              </p>
+              <p>
                 <strong>SKU:</strong> {prodSeleccionado.sku}
               </p>
               <p>
-                <strong>Nombre:</strong> {prodSeleccionado.nombre}
+                <strong>Código de Barras:</strong>{" "}
+                {prodSeleccionado.codigo_barra || "---"}
+              </p>
+              <p>
+                <strong>Observaciones:</strong>
+              </p>
+              <p
+                style={{
+                  fontStyle: "italic",
+                  color: "#555",
+                  background: "#f9f9f9",
+                  padding: "8px",
+                  borderRadius: "4px",
+                }}
+              >
+                {prodSeleccionado.observaciones || "Sin observaciones"}
               </p>
             </div>
 
@@ -142,6 +205,15 @@ function ProductosPage() {
           </>
         )}
       </Modal>
+      {showFormScanner && (
+        <BarcodeScannerModal
+          onClose={() => setShowFormScanner(false)}
+          onScan={(code) => {
+            setFormProd((prev) => ({ ...prev, codigo_barra: code }));
+            setShowFormScanner(false);
+          }}
+        />
+      )}
       <Footer />
     </div>
   );
