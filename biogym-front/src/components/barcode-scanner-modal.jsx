@@ -21,7 +21,10 @@ const BarcodeScannerModal = ({ onClose, onScan }) => {
     if (scannerRef.current && scannerRef.current.isScanning) {
       try {
         await scannerRef.current.stop();
-        if (mountedRef.current) setScanning(false);
+        if (mountedRef.current) {
+          setScanning(false);
+          setLoading(false);
+        }
       } catch (err) {
         console.error("Error al detener el escáner:", err);
       }
@@ -35,7 +38,7 @@ const BarcodeScannerModal = ({ onClose, onScan }) => {
       await new Promise((resolve) => setTimeout(resolve, 100));
       const devices = await Html5Qrcode.getCameras();
       if (!devices || devices.length === 0) {
-        throw new Error("No se detectaron cámaras en este dispositivo.");
+        throw new Error("No se detectaron cámaras.");
       }
       let cameraId = devices[0].id;
       const backCamera = devices.find(
@@ -103,18 +106,23 @@ const BarcodeScannerModal = ({ onClose, onScan }) => {
     <div className="scanner-overlay">
       <div className="scanner-modal">
         <h3 className="scanner-title">Escanear Código</h3>
-        {/* VIDEO */}
-        <div id="reader-custom">
-          {!scanning && !loading && !errorMsg && (
-            <div className="scanner-placeholder">
-              <span>📷</span>
-            </div>
-          )}
-          {loading && (
-            <div className="scanner-placeholder">
-              <span style={{ fontSize: "1rem", color: "#666" }}>
-                Iniciando cámara...
-              </span>
+
+        <div className="scanner-wrapper">
+          
+          <div id="reader-custom"></div>
+
+          {(!scanning || loading) && (
+            <div className="scanner-overlay-ui">
+              {loading ? (
+                <div className="scanner-placeholder">
+                  <span>⏳</span>
+                  <p>Iniciando cámara...</p>
+                </div>
+              ) : (
+                <div className="scanner-placeholder">
+                  <span>📷</span>
+                </div>
+              )}
             </div>
           )}
         </div>
@@ -122,13 +130,17 @@ const BarcodeScannerModal = ({ onClose, onScan }) => {
         {errorMsg && <div className="scanner-error">{errorMsg}</div>}
 
         <div className="scanner-actions">
-          {!scanning ? (
+          {!scanning && !loading ? (
             <button onClick={iniciarEscaner} className="scanner-btn start">
               <span>📸</span> Activar Cámara Trasera
             </button>
           ) : (
-            <button onClick={handleStopClick} className="scanner-btn stop">
-              <span>⏹️</span> Detener Escaneo
+            <button 
+              onClick={handleStopClick} 
+              className="scanner-btn stop"
+              disabled={loading}
+            >
+              <span>⏹️</span> {loading ? "Cargando..." : "Detener Escaneo"}
             </button>
           )}
 
