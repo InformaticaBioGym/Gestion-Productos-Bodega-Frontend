@@ -4,6 +4,7 @@ import "./barcode-scanner-modal.css";
 
 const BarcodeScannerModal = ({ onClose, onScan }) => {
   const [scanning, setScanning] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState(null);
   const scannerRef = useRef(null);
   const mountedRef = useRef(true);
@@ -29,7 +30,9 @@ const BarcodeScannerModal = ({ onClose, onScan }) => {
 
   const iniciarEscaner = async () => {
     setErrorMsg(null);
+    setLoading(true);
     try {
+      await new Promise((resolve) => setTimeout(resolve, 100));
       const devices = await Html5Qrcode.getCameras();
       if (!devices || devices.length === 0) {
         throw new Error("No se detectaron cámaras en este dispositivo.");
@@ -68,7 +71,10 @@ const BarcodeScannerModal = ({ onClose, onScan }) => {
         (errorMessage) => {},
       );
 
-      if (mountedRef.current) setScanning(true);
+      if (mountedRef.current) {
+        setScanning(true);
+        setLoading(false);
+      }
     } catch (err) {
       console.error("Error al iniciar cámara:", err);
       let mensaje = "Error al acceder a la cámara.";
@@ -81,7 +87,10 @@ const BarcodeScannerModal = ({ onClose, onScan }) => {
       } else if (err.message) {
         mensaje = err.message;
       }
-      if (mountedRef.current) setErrorMsg(mensaje);
+      if (mountedRef.current) {
+        setErrorMsg(mensaje);
+        setLoading(false);
+      }
       detenerEscanerInterno();
     }
   };
@@ -94,12 +103,18 @@ const BarcodeScannerModal = ({ onClose, onScan }) => {
     <div className="scanner-overlay">
       <div className="scanner-modal">
         <h3 className="scanner-title">Escanear Código</h3>
-
         {/* VIDEO */}
         <div id="reader-custom">
-          {!scanning && !errorMsg && (
+          {!scanning && !loading && !errorMsg && (
             <div className="scanner-placeholder">
               <span>📷</span>
+            </div>
+          )}
+          {loading && (
+            <div className="scanner-placeholder">
+              <span style={{ fontSize: "1rem", color: "#666" }}>
+                Iniciando cámara...
+              </span>
             </div>
           )}
         </div>

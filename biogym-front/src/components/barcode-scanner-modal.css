@@ -116,3 +116,15 @@
 .scanner-btn.close:hover {
   background-color: #d5d5d5;
 }
+
+#reader-custom video {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  border-radius: 8px;
+}
+
+.scanner-modal {
+  background-color: #ffffff !important;
+  z-index: 100001;
+}
