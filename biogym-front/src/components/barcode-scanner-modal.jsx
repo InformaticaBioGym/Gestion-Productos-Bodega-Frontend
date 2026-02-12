@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { Html5Qrcode } from "html5-qrcode";
+import "./barcode-scanner-modal.css";
 
 const BarcodeScannerModal = ({ onClose, onScan }) => {
   const [scanning, setScanning] = useState(false);
@@ -43,6 +44,8 @@ const BarcodeScannerModal = ({ onClose, onScan }) => {
 
       if (backCamera) {
         cameraId = backCamera.id;
+      } else if (devices.length > 1) {
+        cameraId = devices[devices.length - 1].id;
       }
 
       const html5QrCode = new Html5Qrcode("reader-custom");
@@ -87,117 +90,34 @@ const BarcodeScannerModal = ({ onClose, onScan }) => {
     await detenerEscanerInterno();
   };
 
-  const btnBaseStyle = {
-    padding: "12px 20px",
-    borderRadius: "5px",
-    border: "none",
-    fontSize: "1rem",
-    fontWeight: "bold",
-    cursor: "pointer",
-    width: "100%",
-    marginBottom: "10px",
-    transition: "background-color 0.2s",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    gap: "10px",
-  };
-
-  const btnStartStyle = {
-    ...btnBaseStyle,
-    backgroundColor: "#4CAF50",
-    color: "white",
-  };
-
-  const btnStopStyle = {
-    ...btnBaseStyle,
-    backgroundColor: "#f44336",
-    color: "white",
-  };
-
-  const btnCancelStyle = {
-    ...btnBaseStyle,
-    backgroundColor: "#e0e0e0",
-    color: "#333",
-  };
-
   return (
-    <div
-      style={{
-        position: "fixed",
-        top: 0,
-        left: 0,
-        width: "100%",
-        height: "100%",
-        backgroundColor: "rgba(0,0,0,0.85)",
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        zIndex: 9999,
-      }}
-    >
-      <div
-        style={{
-          background: "white",
-          padding: "25px",
-          borderRadius: "12px",
-          width: "90%",
-          maxWidth: "450px",
-          position: "relative",
-          boxShadow: "0 10px 25px rgba(0,0,0,0.2)",
-          textAlign: "center",
-        }}
-      >
-        <h3 style={{ marginBottom: "20px", color: "#333" }}>
-          Escanear Código de Barras
-        </h3>
+    <div className="scanner-overlay">
+      <div className="scanner-modal">
+        <h3 className="scanner-title">Escanear Código</h3>
 
-        <div
-          id="reader-custom"
-          style={{
-            width: "100%",
-            minHeight: "300px",
-            backgroundColor: "#000",
-            borderRadius: "8px",
-            marginBottom: "20px",
-            overflow: "hidden",
-            display: scanning ? "block" : "none",
-          }}
-        ></div>
+        {/* VIDEO */}
+        <div id="reader-custom">
+          {!scanning && !errorMsg && (
+            <div className="scanner-placeholder">
+              <span>📷</span>
+            </div>
+          )}
+        </div>
 
-        {!scanning && !errorMsg && (
-          <p style={{ marginBottom: "20px", color: "#666" }}>
-            Se requiere acceso a la cámara para escanear.
-          </p>
-        )}
+        {errorMsg && <div className="scanner-error">{errorMsg}</div>}
 
-        {errorMsg && (
-          <div
-            style={{
-              backgroundColor: "#ffebee",
-              color: "#c62828",
-              padding: "10px",
-              borderRadius: "5px",
-              marginBottom: "20px",
-              fontSize: "0.9rem",
-            }}
-          >
-            ⚠️ {errorMsg}
-          </div>
-        )}
-
-        <div style={{ display: "flex", flexDirection: "column", gap: "5px" }}>
+        <div className="scanner-actions">
           {!scanning ? (
-            <button style={btnStartStyle} onClick={iniciarEscaner}>
-              <span>📸</span> Permitir y Usar Cámara Trasera
+            <button onClick={iniciarEscaner} className="scanner-btn start">
+              <span>📸</span> Activar Cámara Trasera
             </button>
           ) : (
-            <button style={btnStopStyle} onClick={handleStopClick}>
+            <button onClick={handleStopClick} className="scanner-btn stop">
               <span>⏹️</span> Detener Escaneo
             </button>
           )}
 
-          <button style={btnCancelStyle} onClick={onClose}>
+          <button onClick={onClose} className="scanner-btn close">
             Cerrar
           </button>
         </div>
