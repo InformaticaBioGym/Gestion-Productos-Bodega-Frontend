@@ -99,13 +99,33 @@ function ProductosPage() {
               placeholder="Ej: Mancuerna 10kg"
             />
             <label>SKU </label>
+            <div style={{ display: "flex", gap: "10px", alignItems: "center" }}>
             <input
               name="sku"
               value={formProd.sku}
               onChange={handleInputChange}
               required
               placeholder="Ej: PROD-123"
+              style={{ flex: 1 }}
             />
+              {formProd.codigo_barra && (
+                      <button
+                          type="button"
+                          onClick={() => setFormProd({ ...formProd, sku: formProd.codigo_barra })}
+                          className="btn-view"
+                          style={{ 
+                              backgroundColor: "#e8e8e8",
+                              border: "1px solid #7b7b7b",
+                              padding: "10px", 
+                              whiteSpace: "nowrap",
+                              height: "42px"
+                          }}
+                          title="Copiar código de barras aquí"
+                      >
+                        Usar Código
+                      </button>
+                  )}
+          </div>
             <label>Código de Barras</label>
             <div style={{ display: "flex", gap: "10px", alignItems: "center" }}>
               <input
@@ -118,6 +138,7 @@ function ProductosPage() {
               <button
                 type="button"
                 onClick={() => setShowFormScanner(true)}
+                className="btn-view"
                 style={{
                   padding: "8px",
                   borderRadius: "5px",
