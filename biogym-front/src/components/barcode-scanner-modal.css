@@ -113,11 +113,24 @@
   align-items: center;
   justify-content: center;
   gap: 8px;
-  transition: background-color 0.2s, transform 0.1s;
+  transition:
+    background-color 0.2s,
+    transform 0.1s;
 }
 
-.scanner-btn:active { transform: scale(0.98); }
+.scanner-btn:active {
+  transform: scale(0.98);
+}
 
-.scanner-btn.start { background-color: #4caf50; color: white; }
-.scanner-btn.stop { background-color: #f44336; color: white; }
-.scanner-btn.close { background-color: #e0e0e0; color: #333; }
+.scanner-btn.start {
+  background-color: #4caf50;
+  color: white;
+}
+.scanner-btn.stop {
+  background-color: #f44336;
+  color: white;
+}
+.scanner-btn.close {
+  background-color: #e0e0e0;
+  color: #333;
+}

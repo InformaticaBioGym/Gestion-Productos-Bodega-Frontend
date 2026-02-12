@@ -108,7 +108,6 @@ const BarcodeScannerModal = ({ onClose, onScan }) => {
         <h3 className="scanner-title">Escanear Código</h3>
 
         <div className="scanner-wrapper">
-          
           <div id="reader-custom"></div>
 
           {(!scanning || loading) && (
@@ -135,8 +134,8 @@ const BarcodeScannerModal = ({ onClose, onScan }) => {
               <span>📸</span> Activar Cámara Trasera
             </button>
           ) : (
-            <button 
-              onClick={handleStopClick} 
+            <button
+              onClick={handleStopClick}
               className="scanner-btn stop"
               disabled={loading}
             >

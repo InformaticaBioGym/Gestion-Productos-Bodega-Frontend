@@ -352,7 +352,15 @@ function UbicacionesPage() {
           </>
         )}
       </Modal>
-
+      {showAddScanner && (
+        <BarcodeScannerModal
+          onClose={() => setShowAddScanner(false)}
+          onScan={(code) => {
+            setProdSearchTerm(code);
+            setShowAddScanner(false);
+          }}
+        />
+      )}
       {/* === ZOOM IMAGEN === */}
       <Modal
         isOpen={!!imgModalUrl}
