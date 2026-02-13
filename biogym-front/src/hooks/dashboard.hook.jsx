@@ -5,25 +5,29 @@ export function useDashboard() {
   const { user } = useAuth();
   const navigate = useNavigate();
 
+  const renderIcon = (src, alt) => (
+    <img src={src} alt={alt} className="dashboard-icon-img" />
+  );
+
   const menuAdmin = [
     {
       title: "Usuarios",
-      icon: "👥",
+      icon: renderIcon("/icono_usuario.png", "Usuarios"),
       action: () => navigate("/usuarios"),
     },
     {
       title: "Productos",
-      icon: "📦",
+      icon: renderIcon("/icono_producto.png", "Productos"),
       action: () => navigate("/productos"),
     },
     {
       title: "Bodegas",
-      icon: "🏭",
+      icon: renderIcon("/icono_bodega.png", "Bodegas"),
       action: () => navigate("/bodegas"),
     },
     {
       title: "Ubicaciones",
-      icon: "📍",
+      icon: renderIcon("/icono_ubicacion.png", "Ubicaciones"),
       action: () => navigate("/ubicaciones"),
     },
   ];
@@ -31,22 +35,22 @@ export function useDashboard() {
   const menuTrabajador = [
     {
       title: "Editar productos",
-      icon: "📦",
+      icon: renderIcon("/icono_producto.png", "Productos"),
       action: () => navigate("/productos"),
     },
     {
       title: "Ubicación producto",
-      icon: "📍",
+      icon: renderIcon("/icono_ubicacion.png", "Ubicaciones"),
       action: () => navigate("/ubicaciones"),
     },
     {
       title: "Bodegas",
-      icon: "🏭",
+      icon: renderIcon("/icono_bodega.png", "Bodegas"),
       action: () => navigate("/bodegas"),
     },
     {
       title: "Mi Perfil",
-      icon: "👤",
+      icon: renderIcon("/icono_usuario.png", "Perfil"),
       tipo: "perfil",
     },
   ];

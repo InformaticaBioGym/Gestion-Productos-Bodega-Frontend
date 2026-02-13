@@ -1,6 +1,8 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Header from "../components/header";
 import Footer from "../components/footer";
+import SearchBar from "../components/search-bar";
 import { useDashboard } from "../hooks/dashboard.hook";
 import "./dashboard.page.css";
 
@@ -8,9 +10,29 @@ function DashboardPage() {
   const { menuItems, user } = useDashboard();
   const [isFlipped, setIsFlipped] = useState(false);
 
+  const [termino, setTermino] = useState("");
+  const navigate = useNavigate();
+
+  const handleSearchRedirect = (valor) => {
+    if (!valor || valor.trim() === "") return;
+    navigate(`/ubicaciones?busqueda=${encodeURIComponent(valor)}`);
+  };
+
   return (
     <div className="dashboard-container">
       <Header />
+      <div className="dashboard-hero">
+        <h1 className="dashboard-title">Buscar producto</h1>        
+        <div className="hero-search-container">
+          <SearchBar
+            placeholder="Escribe SKU, Nombre o escanea..."
+            value={termino}
+            onChange={(e) => setTermino(e.target.value)}
+            onSearch={handleSearchRedirect}
+            showScanner={true}
+          />
+        </div>
+      </div>
       <main className="dashboard-content">
         <div className="menu-grid">
           {menuItems.map((item, index) => {

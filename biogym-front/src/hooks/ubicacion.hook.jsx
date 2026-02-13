@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useSearchParams } from "react-router-dom";
 import { toast } from "sonner";
 import {
   obtenerUbicacionesRequest,
@@ -12,6 +13,9 @@ import { obtenerBodegasRequest } from "../services/bodega.service";
 const API_URL = import.meta.env.VITE_API_URL;
 
 export function useUbicaciones() {
+  const [searchParams] = useSearchParams();
+  const busquedaInicial = searchParams.get("busqueda") || "";
+
   const [ubicaciones, setUbicaciones] = useState([]);
   const [listaProductos, setListaProductos] = useState([]);
   const [listaBodegas, setListaBodegas] = useState([]);
@@ -19,7 +23,8 @@ export function useUbicaciones() {
   const [productosSugeridos, setProductosSugeridos] = useState([]);
   const [buscandoProd, setBuscandoProd] = useState(false);
 
-  const [busqueda, setBusqueda] = useState("");
+  const [busqueda, setBusqueda] = useState(busquedaInicial);
+
   const [cargando, setCargando] = useState(false);
   const [enviando, setEnviando] = useState(false);
 
@@ -97,8 +102,13 @@ export function useUbicaciones() {
   };
 
   useEffect(() => {
-    cargarDatos();
-  }, []);
+    if (busquedaInicial) {
+      setBusqueda(busquedaInicial);
+      cargarDatos(busquedaInicial);
+    } else {
+      cargarDatos("");
+    }
+  }, [busquedaInicial]);
 
   const obtenerUrlImagen = (img) => {
     if (!img) return "https://via.placeholder.com/50?text=Sin+Foto";

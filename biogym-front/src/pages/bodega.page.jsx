@@ -2,6 +2,7 @@ import Header from "../components/header";
 import Footer from "../components/footer";
 import Modal from "../components/modal";
 import Table from "../components/table";
+import SearchBar from "../components/search-bar";
 import { useBodegas } from "../hooks/bodega.hook";
 
 function BodegasPage() {
@@ -43,18 +44,13 @@ function BodegasPage() {
 
   return (
     <div className="page-container">
-      <Header />
+    <Header />
       <div className="content-scroll">
-        <div className="search-bar-container">
-          <span className="search-icon">🔍</span>
-          <input
-            type="text"
-            placeholder="Buscar bodega..."
-            className="search-input"
-            value={busqueda}
-            onChange={(e) => setBusqueda(e.target.value)}
-          />
-        </div>
+        <SearchBar
+        placeholder="Buscar bodega..."
+        value={busqueda}
+        onChange={(e) => setBusqueda(e.target.value)}
+      />
 
         <div className="section-title">
           <h2>Gestión de Bodegas</h2>

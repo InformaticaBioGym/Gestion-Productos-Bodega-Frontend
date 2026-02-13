@@ -23,16 +23,26 @@ function SearchBar({
     setMostrarScanner(false);
   };
 
+  const iconStyle = {
+    width: "22px",
+    height: "22px",
+    objectFit: "contain",
+    display: "block"
+  };
+
   return (
     <>
       <div className="search-bar-container">
-        <span
+        <img
+          src="/icono_buscar.png"
+          alt="Buscar"
           className="search-icon"
           onClick={() => onSearch && onSearch(value)}
-          style={{ cursor: onSearch ? "pointer" : "default" }}
-        >
-          🔍
-        </span>
+          style={{
+            ...iconStyle,
+            cursor: onSearch ? "pointer" : "default",
+          }}
+        />
         <input
           className="search-input"
           type="text"
@@ -42,18 +52,17 @@ function SearchBar({
           onKeyDown={handleKeyDown}
         />
         {showScanner && (
-          <span
-            className="search-icon"
+          <img
+            src="/icono_codigo.png"
+            alt="Escanear"
             onClick={() => setMostrarScanner(true)}
+            title="Escanear código"
             style={{
+              ...iconStyle,
               cursor: "pointer",
               marginLeft: "10px",
-              fontSize: "1.2rem",
             }}
-            title="Escanear código"
-          >
-            📷
-          </span>
+          />
         )}
       </div>
       {mostrarScanner && (
