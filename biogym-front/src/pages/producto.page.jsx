@@ -100,34 +100,36 @@ function ProductosPage() {
             />
             <label>SKU </label>
             <div style={{ display: "flex", gap: "10px", alignItems: "center" }}>
-            <input
-              name="sku"
-              value={formProd.sku}
-              onChange={handleInputChange}
-              required
-              placeholder="Ej: PROD-123"
-              style={{ flex: 1 }}
-            />
+              <input
+                name="sku"
+                value={formProd.sku}
+                onChange={handleInputChange}
+                required
+                placeholder="Ej: PROD-123"
+                style={{ flex: 1 }}
+              />
               {formProd.codigo_barra && (
-                      <button
-                          type="button"
-                          onClick={() => setFormProd({ ...formProd, sku: formProd.codigo_barra })}
-                          className="btn-view"
-                          style={{ 
-                              backgroundColor: "#444",
-                              color: "#ffd21f",
-                              border: "1px solid #ffd21f",
-                              padding: "10px", 
-                              whiteSpace: "nowrap",
-                              height: "42px",
-                              cursor: "pointer",
-                          }}
-                          title="Copiar código de barras aquí"
-                      >
-                        Usar Código
-                      </button>
-                  )}
-          </div>
+                <button
+                  type="button"
+                  onClick={() =>
+                    setFormProd({ ...formProd, sku: formProd.codigo_barra })
+                  }
+                  className="btn-view"
+                  style={{
+                    backgroundColor: "#444",
+                    color: "#ffd21f",
+                    border: "1px solid #ffd21f",
+                    padding: "10px",
+                    whiteSpace: "nowrap",
+                    height: "42px",
+                    cursor: "pointer",
+                  }}
+                  title="Copiar código de barras aquí"
+                >
+                  Usar Código
+                </button>
+              )}
+            </div>
             <label>Código de Barras</label>
             <div style={{ display: "flex", gap: "10px", alignItems: "center" }}>
               <input
@@ -150,10 +152,14 @@ function ProductosPage() {
                 }}
                 title="Escanear Código"
               >
-                <img 
-                  src="/icono_codigo.png" 
-                  alt="Scan" 
-                  style={{ width: "24px", height: "24px", objectFit: "contain" }}
+                <img
+                  src="/icono_codigo.png"
+                  alt="Scan"
+                  style={{
+                    width: "24px",
+                    height: "24px",
+                    objectFit: "contain",
+                  }}
                 />
               </button>
             </div>

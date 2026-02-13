@@ -25,7 +25,7 @@
 .login-logo {
   width: 70px;
   height: auto;
-  margin-bottom: 0px; 
+  margin-bottom: 0px;
   object-fit: contain;
 }
 
@@ -33,7 +33,7 @@
 .login-title {
   color: var(--primary-yellow);
   font-size: 1.6rem;
-  margin: 0; 
+  margin: 0;
   font-weight: 900;
   text-transform: uppercase;
   line-height: 1.1;
@@ -42,19 +42,19 @@
 .login-subtitle {
   color: #333;
   font-size: 1.1rem;
-  margin: 5px 0 20px 0; 
+  margin: 5px 0 20px 0;
   font-weight: 600;
 }
 
 /* === FORMULARIO === */
 .form-group {
-  margin-bottom: 1rem; 
+  margin-bottom: 1rem;
   text-align: left;
 }
 
 .form-group label {
   display: block;
-  margin-bottom: 0.3rem; 
+  margin-bottom: 0.3rem;
   color: #555;
   font-weight: 600;
   font-size: 0.85rem;
@@ -62,7 +62,7 @@
 
 .form-control {
   width: 100%;
-  padding: 0.7rem; 
+  padding: 0.7rem;
   border: 2px solid #eee;
   border-radius: 8px;
   font-size: 0.95rem;
@@ -90,7 +90,7 @@
   font-weight: bold;
   cursor: pointer;
   transition: all 0.3s ease;
-  margin-top: 10px; 
+  margin-top: 10px;
   text-transform: uppercase;
 
   background-color: #444;

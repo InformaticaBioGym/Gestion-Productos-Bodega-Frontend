@@ -172,7 +172,8 @@
   border-color: var(--accent-yellow);
   background-color: var(--background-color);
 }
-.btn-accept:hover, .btn-save:hover {
+.btn-accept:hover,
+.btn-save:hover {
   background-color: var(--accent-yellow);
   color: #1a1a1a;
 }

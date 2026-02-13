@@ -60,7 +60,7 @@
   height: 60px;
   object-fit: contain;
   margin-bottom: 15px;
-  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
 }
 
 /* === BOTONES === */
@@ -83,7 +83,7 @@
 
 .menu-card:hover {
   transform: translateY(-5px);
-  background-color: #383838; 
+  background-color: #383838;
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6);
 }
 

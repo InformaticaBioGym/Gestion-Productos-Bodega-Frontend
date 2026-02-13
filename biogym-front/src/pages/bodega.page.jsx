@@ -44,13 +44,13 @@ function BodegasPage() {
 
   return (
     <div className="page-container">
-    <Header />
+      <Header />
       <div className="content-scroll">
         <SearchBar
-        placeholder="Buscar bodega..."
-        value={busqueda}
-        onChange={(e) => setBusqueda(e.target.value)}
-      />
+          placeholder="Buscar bodega..."
+          value={busqueda}
+          onChange={(e) => setBusqueda(e.target.value)}
+        />
 
         <div className="section-title">
           <h2>Gestión de Bodegas</h2>

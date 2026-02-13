@@ -46,8 +46,8 @@ function Footer() {
   return (
     <footer
       style={{
-        backgroundColor: "#252525", 
-        height: "70px", 
+        backgroundColor: "#252525",
+        height: "70px",
         display: "flex",
         justifyContent: "space-around",
         alignItems: "center",
@@ -62,8 +62,9 @@ function Footer() {
     >
       {navItems.map((item, index) => {
         const isActive = location.pathname === item.path;
-        
-        const isActiveHome = item.path === "/dashboard" && location.pathname === "/"; 
+
+        const isActiveHome =
+          item.path === "/dashboard" && location.pathname === "/";
 
         const activeState = isActive || isActiveHome;
 
@@ -78,13 +79,17 @@ function Footer() {
               alignItems: "center",
               justifyContent: "center",
               cursor: "pointer",
-              backgroundColor: activeState ? "rgba(254, 241, 49, 0.15)" : "transparent",
+              backgroundColor: activeState
+                ? "rgba(254, 241, 49, 0.15)"
+                : "transparent",
               borderRadius: "12px",
               padding: "8px",
               width: "60px",
               height: "60px",
               transition: "all 0.3s ease",
-              border: activeState ? "1px solid rgba(254, 241, 49, 0.3)" : "1px solid transparent",
+              border: activeState
+                ? "1px solid rgba(254, 241, 49, 0.3)"
+                : "1px solid transparent",
             }}
           >
             <img
@@ -95,7 +100,7 @@ function Footer() {
                 height: item.isCenter ? "32px" : "28px",
                 objectFit: "contain",
                 opacity: activeState ? 1 : 0.6,
-                filter: activeState 
+                filter: activeState
                   ? "drop-shadow(0 0 5px rgba(254, 241, 49, 0.5))"
                   : "grayscale(100%) brightness(1.5)",
                 transition: "all 0.3s ease",

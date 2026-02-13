@@ -27,7 +27,7 @@ function SearchBar({
     width: "22px",
     height: "22px",
     objectFit: "contain",
-    display: "block"
+    display: "block",
   };
 
   return (

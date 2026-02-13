@@ -7,12 +7,7 @@ function LoginPage() {
   return (
     <div className="login-container">
       <div className="login-card">
-        
-        <img 
-          src="/BioGym-logo.png" 
-          alt="BioGym Logo" 
-          className="login-logo"
-        />
+        <img src="/BioGym-logo.png" alt="BioGym Logo" className="login-logo" />
 
         <h1 className="login-title">Inventario BioGym</h1>
         <h2 className="login-subtitle">Acceso</h2>
@@ -50,11 +45,7 @@ function LoginPage() {
             )}
           </div>
 
-          <button 
-            type="submit" 
-            className="login-button"
-            disabled={loading}
-          >
+          <button type="submit" className="login-button" disabled={loading}>
             {loading ? "Ingresando..." : "Ingresar"}
           </button>
         </form>

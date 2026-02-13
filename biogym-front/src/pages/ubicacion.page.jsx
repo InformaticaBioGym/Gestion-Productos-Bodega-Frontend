@@ -168,11 +168,15 @@ function UbicacionesPage() {
                     }}
                     title="Escanear Producto"
                   >
-                    <img 
-                  src="/icono_codigo.png" 
-                  alt="Scan" 
-                  style={{ width: "24px", height: "24px", objectFit: "contain" }}
-                />
+                    <img
+                      src="/icono_codigo.png"
+                      alt="Scan"
+                      style={{
+                        width: "24px",
+                        height: "24px",
+                        objectFit: "contain",
+                      }}
+                    />
                   </button>
                 </div>
                 {/* Lista de Sugerencias */}

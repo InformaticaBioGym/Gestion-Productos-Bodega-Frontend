@@ -22,7 +22,7 @@ function DashboardPage() {
     <div className="dashboard-container">
       <Header />
       <div className="dashboard-hero">
-        <h1 className="dashboard-title">Buscar producto</h1>        
+        <h1 className="dashboard-title">Buscar producto</h1>
         <div className="hero-search-container">
           <SearchBar
             placeholder="Escribe SKU, Nombre o escanea..."
