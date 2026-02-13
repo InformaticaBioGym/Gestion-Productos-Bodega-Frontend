@@ -160,15 +160,19 @@ function UbicacionesPage() {
                     onClick={() => setShowAddScanner(true)}
                     style={{
                       padding: "0 10px",
-                      border: "1px solid #ccc",
+                      border: "1px solid #ffd21f",
                       borderRadius: "5px",
                       cursor: "pointer",
-                      background: "#f5f5f5",
+                      background: "#444",
                       fontSize: "1.2rem",
                     }}
                     title="Escanear Producto"
                   >
-                    📷
+                    <img 
+                  src="/icono_codigo.png" 
+                  alt="Scan" 
+                  style={{ width: "24px", height: "24px", objectFit: "contain" }}
+                />
                   </button>
                 </div>
                 {/* Lista de Sugerencias */}
@@ -178,7 +182,7 @@ function UbicacionesPage() {
                       <div
                         style={{
                           padding: 10,
-                          color: "#666",
+                          color: "#1c1c1c",
                           fontStyle: "italic",
                         }}
                       >
@@ -198,11 +202,11 @@ function UbicacionesPage() {
                             <span
                               style={{
                                 fontSize: "0.8em",
-                                color: "#888",
+                                color: "#1c1c1c",
                                 display: "block",
                               }}
                             >
-                              Code: {p.codigo_barra}
+                              Codigo: {p.codigo_barra}
                             </span>
                           )}
                         </div>

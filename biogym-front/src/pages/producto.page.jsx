@@ -42,9 +42,9 @@ function ProductosPage() {
         {p.codigo_barra && (
           <div
             className="user-subdata"
-            style={{ fontSize: "0.8rem", color: "#666" }}
+            style={{ fontSize: "0.8rem", color: "#ffffff" }}
           >
-            Code: {p.codigo_barra}
+            Codigo: {p.codigo_barra}
           </div>
         )}
       </div>
@@ -114,11 +114,13 @@ function ProductosPage() {
                           onClick={() => setFormProd({ ...formProd, sku: formProd.codigo_barra })}
                           className="btn-view"
                           style={{ 
-                              backgroundColor: "#e8e8e8",
-                              border: "1px solid #7b7b7b",
+                              backgroundColor: "#444",
+                              color: "#ffd21f",
+                              border: "1px solid #ffd21f",
                               padding: "10px", 
                               whiteSpace: "nowrap",
-                              height: "42px"
+                              height: "42px",
+                              cursor: "pointer",
                           }}
                           title="Copiar código de barras aquí"
                       >
@@ -142,13 +144,17 @@ function ProductosPage() {
                 style={{
                   padding: "8px",
                   borderRadius: "5px",
-                  border: "1px solid #ccc",
+                  border: "1px solid #ffd21f",
                   cursor: "pointer",
-                  backgroundColor: "#f0f0f0",
+                  backgroundColor: "#444",
                 }}
                 title="Escanear Código"
               >
-                📷
+                <img 
+                  src="/icono_codigo.png" 
+                  alt="Scan" 
+                  style={{ width: "24px", height: "24px", objectFit: "contain" }}
+                />
               </button>
             </div>
             <label>Observaciones</label>
