@@ -7,45 +7,54 @@ function LoginPage() {
   return (
     <div className="login-container">
       <div className="login-card">
-        <h1>BioGym Inventario Acceso</h1>
+        
+        <img 
+          src="/BioGym-logo.png" 
+          alt="BioGym Logo" 
+          className="login-logo"
+        />
+
+        <h1 className="login-title">Inventario BioGym</h1>
+        <h2 className="login-subtitle">Acceso</h2>
 
         {loginErrors.map((error, i) => (
-          <div
-            key={i}
-            style={{ color: "red", marginBottom: "10px", fontSize: "0.9rem" }}
-          >
+          <div key={i} className="alert alert-danger">
             {error}
           </div>
         ))}
 
         <form onSubmit={onSubmit}>
           <div className="form-group">
+            <label>Correo Electrónico</label>
             <input
               type="email"
-              placeholder="Correo electrónico"
+              className="form-control"
+              placeholder="ejemplo@biogym.cl"
               {...register("correo", { required: true })}
             />
             {errors.correo && (
-              <span style={{ color: "red", fontSize: "0.8rem" }}>
-                Campo requerido
-              </span>
+              <span className="text-danger">Campo requerido</span>
             )}
           </div>
 
           <div className="form-group">
+            <label>Contraseña</label>
             <input
               type="password"
-              placeholder="Contraseña"
+              className="form-control"
+              placeholder="********"
               {...register("contraseña", { required: true })}
             />
             {errors.contraseña && (
-              <span style={{ color: "red", fontSize: "0.8rem" }}>
-                Campo requerido
-              </span>
+              <span className="text-danger">Campo requerido</span>
             )}
           </div>
 
-          <button type="submit" disabled={loading}>
+          <button 
+            type="submit" 
+            className="login-button"
+            disabled={loading}
+          >
             {loading ? "Ingresando..." : "Ingresar"}
           </button>
         </form>

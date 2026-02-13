@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import "../styles/global.css";
 
 function Header() {
-  const { logout, user } = useAuth();
+  const { logout } = useAuth();
   const navigate = useNavigate();
 
   return (
@@ -21,31 +21,43 @@ function Header() {
       <div
         className="header-left"
         onClick={() => navigate("/dashboard")}
-        style={{ cursor: "pointer" }}
+        style={{ 
+          cursor: "pointer", 
+          display: "flex", 
+          alignItems: "center", 
+          gap: "12px"
+        }}
       >
-        <h1 style={{ margin: 0, fontSize: "1.2rem", color: "white" }}>
-          BioGym
-        </h1>
-        <span style={{ fontSize: "0.8rem", color: "#aaa" }}>Inventario</span>
+        <img 
+          src="BioGym-logo.png" 
+          alt="BioGym Logo" 
+          style={{ 
+            height: "38px",
+            objectFit: "contain" 
+          }} 
+        />
+        <div style={{ display: "flex", flexDirection: "column", justifyContent: "center" }}>
+          <h1 style={{ margin: 0, fontSize: "1.2rem", color: "white", lineHeight: "1.1" }}>
+            BioGym
+          </h1>
+          <span style={{ fontSize: "0.75rem", color: "#aaa" }}>Inventario</span>
+        </div>
       </div>
       <div
         className="user-info"
-        style={{ display: "flex", alignItems: "center", gap: "10px" }}
+        style={{ display: "flex", alignItems: "center" }}
       >
-        <span style={{ fontSize: "1.5rem" }}>👤</span>
         <button
           onClick={logout}
           style={{
             backgroundColor: "#d32f2f",
             color: "white",
             border: "none",
-            padding: "8px 12px",
+            padding: "8px 15px",
             borderRadius: "5px",
             cursor: "pointer",
             fontWeight: "bold",
-            margin: 0,
-            marginTop: 0,
-            height: "fit-content",
+            fontSize: "0.9rem"
           }}
         >
           Salir
