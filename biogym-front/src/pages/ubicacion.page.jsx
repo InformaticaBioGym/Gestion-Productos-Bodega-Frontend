@@ -124,7 +124,7 @@ function UbicacionesPage() {
         {(modalTipo === "add" || modalTipo === "edit") && (
           <form className="modal-form" onSubmit={handleGuardar}>
             {/* --- AUTOCOMPLETADO DE PRODUCTOS --- */}
-            <label>Producto</label>
+            <label>Selecciona el producto</label>
             {selectedProdName ? (
               <div className="selected-product-badge">
                 <span>{selectedProdName}</span>
@@ -137,7 +137,7 @@ function UbicacionesPage() {
                 <div style={{ display: "flex", gap: "5px" }}>
                   <input
                     type="text"
-                    placeholder="Escribe para buscar producto..."
+                    placeholder="Escribe o escanea y selecciona ➜"
                     value={prodSearchTerm}
                     onChange={(e) => {
                       setProdSearchTerm(e.target.value);
@@ -257,7 +257,7 @@ function UbicacionesPage() {
               name="descripcion"
               value={form.descripcion}
               onChange={handleInputChange}
-              placeholder="Ej: Frente al estante 3"
+              placeholder="Ej: Frente al estante 3, en la parte de arriba..."
             />
 
             <label>Foto del lugar</label>

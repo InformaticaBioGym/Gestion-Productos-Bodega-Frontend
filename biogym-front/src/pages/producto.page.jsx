@@ -36,15 +36,23 @@ function ProductosPage() {
     <div key={p.id} className="list-row">
       <div className="user-data">
         <span className="user-name">{p.nombre}</span>
-        <div className="user-subdata">
-          <span style={{ fontWeight: "bold" }}>SKU: {p.sku}</span>
-        </div>
         {p.codigo_barra && (
           <div
             className="user-subdata"
             style={{ fontSize: "0.8rem", color: "#ffffff" }}
           >
-            Codigo: {p.codigo_barra}
+            Código: {p.codigo_barra}
+          </div>
+        )}
+        <div className="user-subdata">
+          <span style={{ fontWeight: "bold" }}>SKU: {p.sku}</span>
+        </div>
+        {p.observaciones && (
+          <div
+            className="user-subdata"
+            style={{ fontSize: "0.8rem", color: "#ffffff" }}
+          >
+            {p.observaciones}
           </div>
         )}
       </div>
@@ -90,7 +98,7 @@ function ProductosPage() {
         {/* FORMULARIO añadir / editar */}
         {(modalTipo === "add" || modalTipo === "edit") && (
           <form className="modal-form" onSubmit={handleGuardar}>
-            <label>Nombre</label>
+            <label>Nombre del producto</label>
             <input
               name="nombre"
               value={formProd.nombre}
@@ -98,46 +106,14 @@ function ProductosPage() {
               required
               placeholder="Ej: Mancuerna 10kg"
             />
-            <label>SKU </label>
-            <div style={{ display: "flex", gap: "10px", alignItems: "center" }}>
-              <input
-                name="sku"
-                value={formProd.sku}
-                onChange={handleInputChange}
-                required
-                placeholder="Ej: PROD-123"
-                style={{ flex: 1 }}
-              />
-              {formProd.codigo_barra && (
-                <button
-                  type="button"
-                  onClick={() =>
-                    setFormProd({ ...formProd, sku: formProd.codigo_barra })
-                  }
-                  className="btn-view"
-                  style={{
-                    backgroundColor: "#444",
-                    color: "#ffd21f",
-                    border: "1px solid #ffd21f",
-                    padding: "10px",
-                    whiteSpace: "nowrap",
-                    height: "42px",
-                    cursor: "pointer",
-                  }}
-                  title="Copiar código de barras aquí"
-                >
-                  Usar Código
-                </button>
-              )}
-            </div>
             <label>Código de Barras</label>
             <div style={{ display: "flex", gap: "10px", alignItems: "center" }}>
               <input
                 name="codigo_barra"
                 value={formProd.codigo_barra}
                 onChange={handleInputChange}
-                placeholder="Escanea o escribe..."
-                style={{ flex: 1 }}
+                placeholder="Escribe o escanea ➜"
+                style={{ flex: 1, minWidth: 0 }}
               />
               <button
                 type="button"
@@ -149,6 +125,12 @@ function ProductosPage() {
                   border: "1px solid #ffd21f",
                   cursor: "pointer",
                   backgroundColor: "#444",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  height: "42px",
+                  width: "45px",
+                  flexShrink: 0,
                 }}
                 title="Escanear Código"
               >
@@ -163,12 +145,47 @@ function ProductosPage() {
                 />
               </button>
             </div>
+            <label>SKU </label>
+            <div style={{ display: "flex", gap: "10px", alignItems: "center" }}>
+              <input
+                name="sku"
+                value={formProd.sku}
+                onChange={handleInputChange}
+                required
+                placeholder="Ej: PRO-12 o usar codigo ➜"
+                style={{ flex: 1, minWidth: 0 }}
+              />
+              {formProd.codigo_barra && (
+                <button
+                  type="button"
+                  onClick={() =>
+                    setFormProd({ ...formProd, sku: formProd.codigo_barra })
+                  }
+                  className="btn-view"
+                  style={{
+                    backgroundColor: "#444",
+                    color: "#ffd21f",
+                    border: "1px solid #ffd21f",
+                    padding: "8px 10px",
+                    whiteSpace: "nowrap",
+                    height: "42px",
+                    cursor: "pointer",
+                    fontSize: "0.85rem",
+                    borderRadius: "6px",
+                    fontWeight: "bold",
+                  }}
+                  title="Copiar código de barras aquí"
+                >
+                  Usar Código
+                </button>
+              )}
+            </div>
             <label>Observaciones</label>
             <input
               name="observaciones"
               value={formProd.observaciones}
               onChange={handleInputChange}
-              placeholder="ej: esta en 2 cajas, frágil, etc."
+              placeholder="ej: Esta en 2 cajas, frágil, etc."
             />
             <div className="modal-actions">
               <button
@@ -198,11 +215,11 @@ function ProductosPage() {
                 <strong>Nombre:</strong> {prodSeleccionado.nombre}
               </p>
               <p>
-                <strong>SKU:</strong> {prodSeleccionado.sku}
-              </p>
-              <p>
                 <strong>Código de Barras:</strong>{" "}
                 {prodSeleccionado.codigo_barra || "---"}
+              </p>
+              <p>
+                <strong>SKU:</strong> {prodSeleccionado.sku}
               </p>
               <p>
                 <strong>Observaciones:</strong>

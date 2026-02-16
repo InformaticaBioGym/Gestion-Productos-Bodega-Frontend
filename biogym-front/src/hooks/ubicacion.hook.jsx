@@ -75,6 +75,21 @@ export function useUbicaciones() {
     return () => clearTimeout(delayDebounceFn);
   }, [prodSearchTerm]);
 
+  useEffect(() => {
+    if (productosSugeridos.length === 1) {
+      const p = productosSugeridos[0];
+      const termino = prodSearchTerm.trim().toLowerCase();
+
+      const esMatchSku = p.sku.toLowerCase() === termino;
+      const esMatchCodigo = p.codigo_barra && p.codigo_barra.toLowerCase() === termino;
+
+      if (esMatchSku || esMatchCodigo) {
+        seleccionarProducto(p);
+        toast.success("Producto seleccionado automáticamente");
+      }
+    }
+  }, [productosSugeridos]);
+
   // --- DATOS ---
   const cargarDatos = async (termino = "") => {
     try {
