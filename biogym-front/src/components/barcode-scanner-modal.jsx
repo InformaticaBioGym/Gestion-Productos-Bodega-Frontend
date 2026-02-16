@@ -131,7 +131,7 @@ const BarcodeScannerModal = ({ onClose, onScan }) => {
         <div className="scanner-actions">
           {!scanning && !loading ? (
             <button onClick={iniciarEscaner} className="scanner-btn start">
-              <span>📸</span> Activar Cámara Trasera
+              <span>📸</span> Activar Cámara
             </button>
           ) : (
             <button
@@ -139,7 +139,7 @@ const BarcodeScannerModal = ({ onClose, onScan }) => {
               className="scanner-btn stop"
               disabled={loading}
             >
-              <span>⏹️</span> {loading ? "Cargando..." : "Detener Escaneo"}
+              <span>🔴</span> {loading ? "Cargando..." : "Detener Escaneo"}
             </button>
           )}
 
