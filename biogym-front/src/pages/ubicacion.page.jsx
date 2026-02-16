@@ -257,7 +257,7 @@ function UbicacionesPage() {
               name="descripcion"
               value={form.descripcion}
               onChange={handleInputChange}
-              placeholder="Ej: Frente al estante 3, en la parte de arriba..."
+              placeholder="Ej: Frente al estante 3, en la parte superior..."
             />
 
             <label>Foto del lugar</label>
