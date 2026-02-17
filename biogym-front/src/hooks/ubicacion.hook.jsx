@@ -95,18 +95,15 @@ export function useUbicaciones() {
       }else {
         toast.error("Producto no encontrado");
         setProductosSugeridos([]);
-        setShowSuggestions(false);
       }
-
     } catch (error) {
       toast.error("Producto no encontrado");
       setProductosSugeridos([]);
-      setShowSuggestions(false);
     } finally {
       setBuscandoProd(false);
       setTimeout(() => {
         isScanning.current = false;
-      }, 1000);
+      }, 200);
     }
   };
 

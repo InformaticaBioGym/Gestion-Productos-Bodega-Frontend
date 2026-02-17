@@ -365,10 +365,8 @@ function UbicacionesPage() {
         <BarcodeScannerModal
           onClose={() => setShowAddScanner(false)}
           onScan={(code) => {
+            handleCodigoEscaneado(code);
             setShowAddScanner(false);
-            setTimeout(() => {
-              handleCodigoEscaneado(code);
-            }, 300);
           }}
         />
       )}
