@@ -80,6 +80,7 @@ export function useUbicaciones() {
     setSelectedProdName(null);
     setProdSearchTerm(codigo);
     setBuscandoProd(true);
+    setShowSuggestions(true);
     try {
       const res = await obtenerProductosRequest(codigo);
       const productos = res.data;
@@ -90,7 +91,6 @@ export function useUbicaciones() {
       if (matchExacto) {
         seleccionarProducto(matchExacto);
         toast.success(`Producto "${matchExacto.nombre}" seleccionado`);
-        setBuscandoProd(false);
         return;
       }else {
         toast.error("Producto no encontrado");
