@@ -82,3 +82,20 @@ body {
     font-size: 15px !important;
   }
 }
+
+#html5qr-code-full-region, 
+#reader,
+.html5-qrcode-element {
+  z-index: 99999 !important;
+  position: relative;
+}
+
+.barcode-scanner-modal, 
+div[class*="scanner"] {
+  z-index: 99999 !important;
+}
+
+.modal-overlay:has(video),
+.modal-overlay:has(#html5qr-code-full-region) {
+  z-index: 99999 !important;
+}
