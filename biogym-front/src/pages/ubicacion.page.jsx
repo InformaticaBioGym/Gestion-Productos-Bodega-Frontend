@@ -364,6 +364,7 @@ function UbicacionesPage() {
         <BarcodeScannerModal
           onClose={() => setShowAddScanner(false)}
           onScan={(code) => {
+            console.log("¡CÓDIGO LEÍDO!: ", code);
             handleCodigoEscaneado(code);
             setShowAddScanner(false);
           }}
