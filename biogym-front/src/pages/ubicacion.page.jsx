@@ -42,6 +42,7 @@ function UbicacionesPage() {
     abrirModalVer,
     irAEditar,
     cerrarModal,
+    handleCodigoEscaneado,
   } = useUbicaciones();
 
   const [showAddScanner, setShowAddScanner] = useState(false);
