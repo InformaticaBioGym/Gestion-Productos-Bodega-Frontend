@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useSearchParams } from "react-router-dom";
 import { toast } from "sonner";
 import {
@@ -17,14 +17,17 @@ export function useUbicaciones() {
   const busquedaInicial = searchParams.get("busqueda") || "";
 
   const [ubicaciones, setUbicaciones] = useState([]);
-  const [listaProductos, setListaProductos] = useState([]);
   const [listaBodegas, setListaBodegas] = useState([]);
 
   const [productosSugeridos, setProductosSugeridos] = useState([]);
   const [buscandoProd, setBuscandoProd] = useState(false);
+  const [prodSearchTerm, setProdSearchTerm] = useState("");
+  const [showSuggestions, setShowSuggestions] = useState(false);
+  const [selectedProdName, setSelectedProdName] = useState(null);
+
+  const isScanning = useRef(false);
 
   const [busqueda, setBusqueda] = useState(busquedaInicial);
-
   const [cargando, setCargando] = useState(false);
   const [enviando, setEnviando] = useState(false);
 
@@ -35,6 +38,7 @@ export function useUbicaciones() {
 
   // ---IMAGEN ---
   const [imgModalUrl, setImgModalUrl] = useState(null);
+  const [previewUrl, setPreviewUrl] = useState(null);
 
   // --- FORMULARIO ---
   const [form, setForm] = useState({
@@ -44,13 +48,10 @@ export function useUbicaciones() {
     descripcion: "",
     foto: null,
   });
-  const [previewUrl, setPreviewUrl] = useState(null);
-
-  const [prodSearchTerm, setProdSearchTerm] = useState("");
-  const [showSuggestions, setShowSuggestions] = useState(false);
-  const [selectedProdName, setSelectedProdName] = useState(null);
 
   useEffect(() => {
+    if (isScanning.current) return;
+
     if (prodSearchTerm.length < 2 || selectedProdName) {
       setProductosSugeridos([]);
       return;
@@ -63,9 +64,8 @@ export function useUbicaciones() {
         setProductosSugeridos(res.data);
         setShowSuggestions(true);
       } catch (error) {
-        if (error.response?.status === 404) {
-          setProductosSugeridos([]);
-        }
+        setProductosSugeridos([]);
+        setShowSuggestions(true);
       } finally {
         setBuscandoProd(false);
       }
@@ -75,6 +75,7 @@ export function useUbicaciones() {
   }, [prodSearchTerm, selectedProdName]);
 
   const handleCodigoEscaneado = async (codigo) => {
+    isScanning.current = true;
     setForm((prev) => ({ ...prev, producto_id: "" }));
     setSelectedProdName(null);
     setProdSearchTerm(codigo);
@@ -103,6 +104,9 @@ export function useUbicaciones() {
       setShowSuggestions(false);
     } finally {
       setBuscandoProd(false);
+      setTimeout(() => {
+        isScanning.current = false;
+      }, 600);
     }
   };
 
