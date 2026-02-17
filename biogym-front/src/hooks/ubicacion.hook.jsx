@@ -106,7 +106,7 @@ export function useUbicaciones() {
       setBuscandoProd(false);
       setTimeout(() => {
         isScanning.current = false;
-      }, 600);
+      }, 1000);
     }
   };
 
