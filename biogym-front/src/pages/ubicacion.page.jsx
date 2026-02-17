@@ -364,11 +364,10 @@ function UbicacionesPage() {
         <BarcodeScannerModal
           onClose={() => setShowAddScanner(false)}
           onScan={(code) => {
-            alert(`Código leído: ${code}`);
             setShowAddScanner(false);
             setTimeout(() => {
               handleCodigoEscaneado(code);
-            }, 200);
+            }, 300);
           }}
         />
       )}
