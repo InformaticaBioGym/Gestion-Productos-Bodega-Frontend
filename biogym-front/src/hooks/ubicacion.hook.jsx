@@ -51,10 +51,11 @@ export function useUbicaciones() {
   const [selectedProdName, setSelectedProdName] = useState(null);
 
   useEffect(() => {
-    if (prodSearchTerm.length < 2) {
+    if (prodSearchTerm.length < 2 || selectedProdName) {
       setProductosSugeridos([]);
       return;
     }
+
     const delayDebounceFn = setTimeout(async () => {
       setBuscandoProd(true);
       try {
@@ -64,8 +65,6 @@ export function useUbicaciones() {
       } catch (error) {
         if (error.response?.status === 404) {
           setProductosSugeridos([]);
-        } else {
-          console.error("Error buscando productos:", error);
         }
       } finally {
         setBuscandoProd(false);
@@ -73,22 +72,39 @@ export function useUbicaciones() {
     }, 500);
 
     return () => clearTimeout(delayDebounceFn);
-  }, [prodSearchTerm]);
+  }, [prodSearchTerm, selectedProdName]);
 
-  useEffect(() => {
-    if (productosSugeridos.length === 1) {
-      const p = productosSugeridos[0];
-      const termino = prodSearchTerm.trim().toLowerCase();
+  const handleCodigoEscaneado = async (codigo) => {
+    setForm((prev) => ({ ...prev, producto_id: "" }));
+    setSelectedProdName(null);
+    setProdSearchTerm(codigo);
+    setBuscandoProd(true);
+    try {
+      const res = await obtenerProductosRequest(codigo);
+      const productos = res.data;
+      const matchExacto = productos.find(
+        (p) => p.codigo_barra && p.codigo_barra.toLowerCase() === codigo.toLowerCase()
+      );
 
-      const esMatchSku = p.sku.toLowerCase() === termino;
-      const esMatchCodigo = p.codigo_barra && p.codigo_barra.toLowerCase() === termino;
-
-      if (esMatchSku || esMatchCodigo) {
-        seleccionarProducto(p);
-        toast.success("Producto seleccionado automáticamente");
+      if (matchExacto) {
+        seleccionarProducto(matchExacto);
+        toast.success(`Producto "${matchExacto.nombre}" seleccionado`);
+        setBuscandoProd(false);
+        return;
+      }else {
+        toast.error("Producto no encontrado");
+        setProductosSugeridos([]);
+        setShowSuggestions(false);
       }
+
+    } catch (error) {
+      toast.error("Producto no encontrado");
+      setProductosSugeridos([]);
+      setShowSuggestions(false);
+    } finally {
+      setBuscandoProd(false);
     }
-  }, [productosSugeridos]);
+  };
 
   // --- DATOS ---
   const cargarDatos = async (termino = "") => {
@@ -131,10 +147,11 @@ export function useUbicaciones() {
   };
 
   const seleccionarProducto = (prod) => {
-    setForm({ ...form, producto_id: prod.id });
+    setForm((prev) => ({ ...prev, producto_id: prod.id }));
     setSelectedProdName(`${prod.nombre} (SKU: ${prod.sku})`);
     setProdSearchTerm("");
     setShowSuggestions(false);
+    setProductosSugeridos([]);
   };
 
   const quitarProducto = () => {
@@ -284,5 +301,6 @@ export function useUbicaciones() {
     abrirModalVer,
     irAEditar,
     cerrarModal,
+    handleCodigoEscaneado,
   };
 }

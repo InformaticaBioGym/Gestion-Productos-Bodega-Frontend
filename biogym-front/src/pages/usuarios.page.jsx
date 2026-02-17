@@ -25,6 +25,7 @@ function UsuariosPage() {
     abrirModalVer,
     irAEditar,
     cerrarModal,
+    handleCodigoEscaneado,
   } = useUsuarios();
 
   // Funcion tabla

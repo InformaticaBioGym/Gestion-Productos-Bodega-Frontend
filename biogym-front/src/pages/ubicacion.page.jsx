@@ -180,7 +180,7 @@ function UbicacionesPage() {
                   </button>
                 </div>
                 {/* Lista de Sugerencias */}
-                {showSuggestions && (
+                {(showSuggestions || buscandoProd) && (
                   <div className="suggestions-list">
                     {buscandoProd && (
                       <div
@@ -364,7 +364,7 @@ function UbicacionesPage() {
         <BarcodeScannerModal
           onClose={() => setShowAddScanner(false)}
           onScan={(code) => {
-            setProdSearchTerm(code);
+            handleCodigoEscaneado(code);
             setShowAddScanner(false);
           }}
         />
