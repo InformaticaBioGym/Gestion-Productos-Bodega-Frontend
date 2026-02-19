@@ -63,7 +63,11 @@ export function useUsuarios() {
     if (enviando) return;
     setEnviando(true);
     try {
-      await crearUsuarioRequest(nuevoUsuario);
+      const usuarioAEnviar = {
+        ...nuevoUsuario,
+        correo: nuevoUsuario.correo.toLowerCase().trim()
+      };
+      await crearUsuarioRequest(usuarioAEnviar);
       toast.success("Usuario creado con éxito");
       cargarUsuarios();
       cerrarModal();
@@ -83,7 +87,10 @@ export function useUsuarios() {
     if (enviando) return;
     setEnviando(true);
     try {
-      const datosActualizados = { ...nuevoUsuario };
+      const datosActualizados = { 
+        ...nuevoUsuario,
+        correo: nuevoUsuario.correo.toLowerCase().trim()
+      };
       if (!datosActualizados.contraseña) {
         delete datosActualizados.contraseña;
       }

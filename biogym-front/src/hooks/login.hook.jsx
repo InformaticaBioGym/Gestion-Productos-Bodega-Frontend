@@ -18,7 +18,11 @@ export function useLogin() {
   }, [isAuthenticated, navigate]);
 
   const onSubmit = handleSubmit(async (values) => {
-    await signin(values);
+    const datosLimpios = {
+      ...values,
+      correo: values.correo.toLowerCase().trim(),
+    };
+    await signin(datosLimpios);
   });
 
   return {
