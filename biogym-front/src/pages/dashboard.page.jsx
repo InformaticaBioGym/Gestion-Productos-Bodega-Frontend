@@ -95,8 +95,6 @@ function DashboardPage() {
       </main>
       <Modal isOpen={isGuideOpen} onClose={closeGuide}>
         <div className="carousel-container">
-          <h2 className="carousel-title">Guía Rápida</h2>
-          
           <div className="carousel-image-wrapper">
             <img
               src={guideImages[currentGuideStep]}
