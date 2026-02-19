@@ -65,7 +65,7 @@ export function useUsuarios() {
     try {
       const usuarioAEnviar = {
         ...nuevoUsuario,
-        correo: nuevoUsuario.correo.toLowerCase().trim()
+        correo: nuevoUsuario.correo.toLowerCase().trim(),
       };
       await crearUsuarioRequest(usuarioAEnviar);
       toast.success("Usuario creado con éxito");
@@ -87,9 +87,9 @@ export function useUsuarios() {
     if (enviando) return;
     setEnviando(true);
     try {
-      const datosActualizados = { 
+      const datosActualizados = {
         ...nuevoUsuario,
-        correo: nuevoUsuario.correo.toLowerCase().trim()
+        correo: nuevoUsuario.correo.toLowerCase().trim(),
       };
       if (!datosActualizados.contraseña) {
         delete datosActualizados.contraseña;

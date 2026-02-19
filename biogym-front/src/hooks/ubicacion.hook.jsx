@@ -85,14 +85,16 @@ export function useUbicaciones() {
       const res = await obtenerProductosRequest(codigo);
       const productos = res.data;
       const matchExacto = productos.find(
-        (p) => p.codigo_barra && p.codigo_barra.toLowerCase() === codigo.toLowerCase()
+        (p) =>
+          p.codigo_barra &&
+          p.codigo_barra.toLowerCase() === codigo.toLowerCase(),
       );
 
       if (matchExacto) {
         seleccionarProducto(matchExacto);
         toast.success(`Producto "${matchExacto.nombre}" seleccionado`);
         return;
-      }else {
+      } else {
         toast.error("Producto no encontrado");
         setProductosSugeridos([]);
       }

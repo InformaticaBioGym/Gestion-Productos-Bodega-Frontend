@@ -265,7 +265,53 @@ function UbicacionesPage() {
             {previewUrl && (
               <img src={previewUrl} alt="Preview" className="image-preview" />
             )}
-            <input type="file" accept="image/*" onChange={handleFileChange} />
+            <div style={{ display: "flex", gap: "10px", marginTop: "5px" }}>
+              <label
+                className="btn-view"
+                style={{
+                  flex: 1,
+                  textAlign: "center",
+                  margin: 0,
+                  padding: "10px",
+                  cursor: "pointer",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  gap: "5px",
+                }}
+              >
+                📷 Cámara
+                <input
+                  type="file"
+                  accept="image/*"
+                  capture="environment"
+                  onChange={handleFileChange}
+                  style={{ display: "none" }}
+                />
+              </label>
+              <label
+                className="btn-view"
+                style={{
+                  flex: 1,
+                  textAlign: "center",
+                  margin: 0,
+                  padding: "10px",
+                  cursor: "pointer",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  gap: "5px",
+                }}
+              >
+                🖼️ Galería
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={handleFileChange}
+                  style={{ display: "none" }}
+                />
+              </label>
+            </div>
 
             <div className="modal-actions">
               <button
