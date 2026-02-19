@@ -1,9 +1,38 @@
+import { useState } from "react";
 import { useAuth } from "../context/auth.context";
 import { useNavigate } from "react-router-dom";
 
 export function useDashboard() {
   const { user } = useAuth();
   const navigate = useNavigate();
+
+  const [isGuideOpen, setIsGuideOpen] = useState(false);
+  const [currentGuideStep, setCurrentGuideStep] = useState(0);
+
+  const guideImages = [
+    "/Guia de uso app.png", 
+    "/Guia Editar Producto.png", 
+    "/Guia Ubicacion Producto.png"
+  ];
+
+  const openGuide = () => {
+    setCurrentGuideStep(0);
+    setIsGuideOpen(true);
+  };
+
+  const closeGuide = () => setIsGuideOpen(false);
+
+  const nextStep = () => {
+    if (currentGuideStep < guideImages.length - 1) {
+      setCurrentGuideStep((prev) => prev + 1);
+    }
+  };
+
+  const prevStep = () => {
+    if (currentGuideStep > 0) {
+      setCurrentGuideStep((prev) => prev - 1);
+    }
+  };
 
   const renderIcon = (src, alt) => (
     <img src={src} alt={alt} className="dashboard-icon-img" />
@@ -60,5 +89,12 @@ export function useDashboard() {
   return {
     menuItems,
     user,
+    isGuideOpen,
+    currentGuideStep,
+    guideImages,
+    openGuide,
+    closeGuide,
+    nextStep,
+    prevStep,
   };
 }
