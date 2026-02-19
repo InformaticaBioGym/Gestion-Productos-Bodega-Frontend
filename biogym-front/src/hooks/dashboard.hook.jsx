@@ -10,9 +10,9 @@ export function useDashboard() {
   const [currentGuideStep, setCurrentGuideStep] = useState(0);
 
   const guideImages = [
-    "/Guia de uso app.png", 
-    "/Guia Editar Producto.png", 
-    "/Guia Ubicacion Producto.png"
+    "/Guia de uso app.png",
+    "/Guia Editar Producto.png",
+    "/Guia Ubicacion Producto.png",
   ];
 
   const openGuide = () => {

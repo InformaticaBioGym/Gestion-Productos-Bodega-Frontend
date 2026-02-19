@@ -17,7 +17,7 @@ function DashboardPage() {
     openGuide,
     closeGuide,
     nextStep,
-    prevStep 
+    prevStep,
   } = useDashboard();
 
   const [isFlipped, setIsFlipped] = useState(false);
@@ -100,7 +100,11 @@ function DashboardPage() {
               src={guideImages[currentGuideStep]}
               alt={`Paso ${currentGuideStep + 1}`}
               className="carousel-image"
-              onError={(e) => e.target.src = "https://via.placeholder.com/300x400?text=Guia+Paso+" + (currentGuideStep + 1)}
+              onError={(e) =>
+                (e.target.src =
+                  "https://via.placeholder.com/300x400?text=Guia+Paso+" +
+                  (currentGuideStep + 1))
+              }
             />
           </div>
 

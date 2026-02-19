@@ -267,21 +267,21 @@
 
 @media (min-width: 768px) {
   .modal-content:has(.carousel-container) {
-    max-width: 500px !important; 
+    max-width: 500px !important;
     width: 90% !important;
     padding: 15px !important;
     max-height: 130vh !important;
   }
 
   .carousel-image-wrapper {
-    min-height: auto; 
+    min-height: auto;
     background-color: transparent;
     border: none;
   }
 
   .carousel-image {
-    max-height: 82vh; 
+    max-height: 82vh;
     width: 100%;
-    object-fit: contain; 
+    object-fit: contain;
   }
 }
