@@ -90,7 +90,7 @@ function DashboardPage() {
           })}
         </div>
         <button className="btn-guide" onClick={openGuide}>
-          📖 ¿Cómo usar la app?
+          ¿Cómo usar la app?
         </button>
       </main>
       <Modal isOpen={isGuideOpen} onClose={closeGuide}>
